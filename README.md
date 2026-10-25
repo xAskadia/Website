@@ -20,7 +20,7 @@ npm run preview    # Build lokal ansehen
 | Was | Wo |
 | --- | --- |
 | Name, E-Mail, Telefon, Region, Social Links, Impressumsdaten | `src/content/site.ts` |
-| **Porträt** | Bild nach `public/images/` legen, Pfad in `site.ts` → `portrait.src` eintragen |
+| **Porträt** | `public/images/portrait.webp` (+ `portrait-560.webp` für Smartphones); Bildausschnitt über `portrait.focus` in `site.ts` |
 | Leistungen (Titel, Teaser, Menü) | `src/content/services.ts` |
 | Portfolio & Case Studies | `src/content/projects.ts`; eigene Screenshots über `images: { desktop, tablet, mobile }` |
 | FAQ | `src/content/faq.ts` |

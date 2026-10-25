@@ -22,7 +22,7 @@ function page(url, html) {
     .replace(/<meta name="description"[^>]*>/, `<meta name="description" content="${esc(meta.description)}" />`)
     .replace(/<meta property="og:title"[^>]*>/, `<meta property="og:title" content="${esc(meta.title)}" />`)
     .replace(/<meta property="og:description"[^>]*>/, `<meta property="og:description" content="${esc(meta.description)}" />`)
-    .replace('<!--head-extra-->', `<link rel="canonical" href="${base}${url === '/' ? '/' : url}" />`)
+    .replace('<!--head-extra-->', `<link rel="canonical" href="${base}${url === '/' ? '/' : url}" />\n    <meta property="og:image" content="${base}/images/portrait.webp" />\n    <link rel="preload" as="image" href="/images/portrait-560.webp" media="(max-width: 640px)" />`)
     .replace('<!--app-html-->', html)
 }
 

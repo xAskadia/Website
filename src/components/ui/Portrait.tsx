@@ -7,7 +7,21 @@ import { cn } from '../../lib/cn'
  */
 export function Portrait({ className, eager, label = true }: { className?: string; eager?: boolean; label?: boolean }) {
   if (site.portrait.src) {
-    return <img src={site.portrait.src} alt={site.portrait.alt} loading={eager ? 'eager' : 'lazy'} decoding="async" className={cn('h-full w-full object-cover', className)} />
+    return (
+      <img
+        src={site.portrait.src}
+        srcSet={`${site.portrait.srcSmall} 560w, ${site.portrait.src} 1122w`}
+        sizes="(max-width: 640px) 50vw, 440px"
+        width={1122}
+        height={1402}
+        alt={site.portrait.alt}
+        loading={eager ? 'eager' : 'lazy'}
+        fetchPriority={eager ? 'high' : undefined}
+        decoding="async"
+        className={cn('h-full w-full object-cover', className)}
+        style={{ objectPosition: site.portrait.focus }}
+      />
+    )
   }
   return (
     <div className={cn('relative h-full w-full overflow-hidden bg-[#c9d3bb]', className)} role="img" aria-label="Platzhalter für das Porträt von Adelina Rrustolli">

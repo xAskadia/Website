@@ -44,8 +44,11 @@ export const site = {
    * Platzhalter-Grafik angezeigt.
    */
   portrait: {
-    src: '',
-    alt: 'Porträt von Adelina Rrustolli',
+    src: `${import.meta.env.BASE_URL}images/portrait.webp`,
+    srcSmall: `${import.meta.env.BASE_URL}images/portrait-560.webp`,
+    alt: 'Adelina Rrustolli, Webdesignerin, im schwarzen Blazer vor hellem Hintergrund',
+    /** Bildausschnitt im Rahmen (CSS object-position) – Gesicht bleibt im Fokus */
+    focus: '50% 22%',
   },
 } as const
 
