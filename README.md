@@ -21,13 +21,14 @@ npm run preview    # Build lokal ansehen
 | --- | --- |
 | Name, E-Mail, Telefon, Region, Social Links, Impressumsdaten | `src/content/site.ts` |
 | **Porträt** | `public/images/portrait.webp` (+ `portrait-560.webp` für Smartphones); Bildausschnitt über `portrait.focus` in `site.ts` |
-| Leistungen (Titel, Teaser, Menü) | `src/content/services.ts` |
+| Angebot: Onepager, Unternehmenswebsite, Landingpage, Relaunch | `src/content/websiteTypes.ts` |
+| Abschnitte & Menü (Sprungmarken) | `src/content/sections.ts` |
 | Portfolio & Case Studies | `src/content/projects.ts`; eigene Screenshots über `images: { desktop, tablet, mobile }` |
 | FAQ | `src/content/faq.ts` |
 | Seitentitel & Meta-Beschreibungen | `src/content/seo.ts` |
 | Beispielpreise im Konfigurator | `src/content/pricing.ts`; `showExamplePrices: false` blendet alle Preise aus |
 | Logik des Website-Finders | `src/lib/finder.ts` (Punkte pro Antwort, nachvollziehbar kommentiert) |
-| Farben & Schriften (Corporate Design: Moos, Leinen, Messing, Salbei · Bodoni Moda, Jost, Mrs Saint Delafield) | `src/styles/index.css` → `@theme` |
+| Farben & Schriften (Weiß mit Grün-Akzent und Farbverlauf · Jost, Akzente in Bodoni, Handschrift sparsam) | `src/styles/index.css` → `@theme` |
 
 Alle Platzhalter stehen in `[eckigen Klammern]`. Alle Portfolio-Projekte sind als **fiktive Demo-Projekte** gekennzeichnet (`isDemo: true`).
 
@@ -49,11 +50,11 @@ src/
   content/       Texte & Daten (zum Bearbeiten gedacht)
   components/
     layout/      Header mit Megamenü, mobiles Menü, Footer
-    home/        Hero-Bühne, Scroll-Erzählung „Von der Idee zur Website“
+    sections/    Abschnitte der Onepage (Hero, Websites, Ablauf, Arbeiten, Über mich, Finder, FAQ, Kontakt)
     mockups/     Generierte Website-Mockups, Geräterahmen, Vorher-Website
-    tools/       Konfigurator, Landingpage-Vorschau, Brand-Explorer, Anfragen-Rechner
+    tools/       Website-Konfigurator
     ui/          Buttons, Akkordeon, Vorher-Nachher-Slider, Seitenköpfe …
-  pages/         Eine Datei pro Seite (per Code-Splitting geladen)
+  pages/         Onepage, Case Studies, Impressum, Datenschutz
   lib/           Hilfsfunktionen (Finder-Logik, Anfrage-Übergabe, Meta-Tags)
 scripts/prerender.mjs   Statisches Prerendering aller Routen
 ```

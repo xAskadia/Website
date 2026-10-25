@@ -10,12 +10,12 @@ export const faqs: Faq[] = [
   {
     cat: 'Ablauf',
     q: 'Wie läuft ein Website-Projekt mit dir ab?',
-    a: 'In sechs Phasen: Kennenlernen, Strategie, Design, Entwicklung, Testing & Launch und – wenn du möchtest – Weiterentwicklung. Du weißt jederzeit, wo wir stehen und was als Nächstes passiert. Den genauen Ablauf findest du auf der Seite „Arbeitsweise“.',
+    a: 'In sechs Phasen: Kennenlernen, Strategie, Design, Entwicklung, Testing & Launch und – wenn du möchtest – Weiterentwicklung. Du weißt jederzeit, wo wir stehen und was als Nächstes passiert. Den genauen Ablauf findest du oben im Abschnitt „Ablauf“.',
   },
   {
     cat: 'Kosten',
     q: 'Was kostet eine Website?',
-    a: 'Das hängt vom Umfang ab: Anzahl der Seiten, Funktionen wie Buchungssystem oder Mehrsprachigkeit, ob Texte und Bilder vorhanden sind. Nach einem kurzen Gespräch bekommst du ein transparentes, individuelles Angebot – ohne versteckte Posten. Im Website-Konfigurator kannst du dir vorab einen Überblick verschaffen.',
+    a: 'Das hängt vom Umfang ab: Anzahl der Seiten, Funktionen wie Buchungssystem oder Mehrsprachigkeit, ob Texte und Bilder vorhanden sind. Nach einem kurzen Gespräch bekommst du ein transparentes, individuelles Angebot – ohne versteckte Posten. Im Website-Konfigurator auf dieser Seite kannst du dir vorab einen Überblick verschaffen.',
   },
   {
     cat: 'Ablauf',

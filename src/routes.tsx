@@ -2,20 +2,7 @@ import { lazyPage } from './lib/lazyPage'
 
 export const pages = {
   home: lazyPage(() => import('./pages/Home')),
-  services: lazyPage(() => import('./pages/Services')),
-  webdesign: lazyPage(() => import('./pages/leistungen/Webdesign')),
-  landingpages: lazyPage(() => import('./pages/leistungen/Landingpages')),
-  relaunch: lazyPage(() => import('./pages/leistungen/Relaunch')),
-  corporate: lazyPage(() => import('./pages/leistungen/CorporateDesign')),
-  marketing: lazyPage(() => import('./pages/leistungen/OnlineMarketing')),
-  projekt: lazyPage(() => import('./pages/leistungen/Projektbegleitung')),
-  portfolio: lazyPage(() => import('./pages/Portfolio')),
   caseStudy: lazyPage(() => import('./pages/CaseStudy')),
-  about: lazyPage(() => import('./pages/About')),
-  process: lazyPage(() => import('./pages/Process')),
-  faq: lazyPage(() => import('./pages/Wissen')),
-  finder: lazyPage(() => import('./pages/WebsiteFinder')),
-  contact: lazyPage(() => import('./pages/Contact')),
   imprint: lazyPage(() => import('./pages/Impressum')),
   privacy: lazyPage(() => import('./pages/Datenschutz')),
   notFound: lazyPage(() => import('./pages/NotFound')),
@@ -23,21 +10,22 @@ export const pages = {
 
 export const routeTable: { path: string; page: keyof typeof pages }[] = [
   { path: '/', page: 'home' },
-  { path: '/leistungen', page: 'services' },
-  { path: '/leistungen/webdesign', page: 'webdesign' },
-  { path: '/leistungen/landingpages', page: 'landingpages' },
-  { path: '/leistungen/relaunch', page: 'relaunch' },
-  { path: '/leistungen/corporate-design', page: 'corporate' },
-  { path: '/leistungen/online-marketing', page: 'marketing' },
-  { path: '/leistungen/projektbegleitung', page: 'projekt' },
-  { path: '/portfolio', page: 'portfolio' },
   { path: '/portfolio/:slug', page: 'caseStudy' },
-  { path: '/ueber-mich', page: 'about' },
-  { path: '/arbeitsweise', page: 'process' },
-  { path: '/wissen', page: 'faq' },
-  { path: '/website-finder', page: 'finder' },
-  { path: '/kontakt', page: 'contact' },
   { path: '/impressum', page: 'imprint' },
   { path: '/datenschutz', page: 'privacy' },
   { path: '*', page: 'notFound' },
 ]
+
+/** Frühere Unterseiten führen zum passenden Abschnitt der Onepage. */
+export const redirects: Record<string, string> = {
+  '/leistungen': 'leistungen',
+  '/leistungen/webdesign': 'leistungen',
+  '/leistungen/landingpages': 'leistungen',
+  '/leistungen/relaunch': 'leistungen',
+  '/portfolio': 'arbeiten',
+  '/ueber-mich': 'ueber-mich',
+  '/arbeitsweise': 'ablauf',
+  '/wissen': 'faq',
+  '/website-finder': 'konfigurator',
+  '/kontakt': 'kontakt',
+}

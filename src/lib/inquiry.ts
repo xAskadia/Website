@@ -15,8 +15,9 @@ export function saveInquiryDraft(draft: InquiryDraft) {
   try {
     sessionStorage.setItem(KEY, JSON.stringify(draft))
   } catch {
-    /* Speicher nicht verfügbar – Übergabe entfällt */
+    /* Speicher nicht verfügbar – Übergabe läuft nur über das Ereignis */
   }
+  window.dispatchEvent(new CustomEvent('inquiry:draft', { detail: draft }))
 }
 
 export function readInquiryDraft(): InquiryDraft | null {

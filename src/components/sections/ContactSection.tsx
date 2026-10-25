@@ -1,13 +1,16 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useId, useState, type FormEvent, type ReactNode } from 'react'
 import { Link } from 'react-router'
-import { Button } from '../components/ui/Button'
-import { Icon } from '../components/ui/Icon'
-import { Portrait } from '../components/ui/Portrait'
-import { services } from '../content/services'
-import { contactEndpoint, site } from '../content/site'
-import { clearInquiryDraft, readInquiryDraft, type InquiryDraft } from '../lib/inquiry'
-import { cn } from '../lib/cn'
+import { Button } from '../ui/Button'
+import { Icon } from '../ui/Icon'
+import { Portrait } from '../ui/Portrait'
+import { websiteTypes } from '../../content/websiteTypes'
+import { contactEndpoint, site } from '../../content/site'
+import { clearInquiryDraft, readInquiryDraft, type InquiryDraft } from '../../lib/inquiry'
+import { cn } from '../../lib/cn'
+import { useGoToSection } from '../../lib/sections'
+
+const serviceOptions = [...websiteTypes.map((w) => w.title), 'Noch unklar – Beratung gewünscht']
 
 interface FormState {
   name: string
@@ -31,7 +34,7 @@ function validate(f: FormState): Errors {
   const e: Errors = {}
   if (f.name.trim().length < 2) e.name = 'Bitte gib deinen Namen an.'
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(f.email.trim())) e.email = 'Bitte gib eine gültige E-Mail-Adresse an.'
-  if (!f.service) e.service = 'Bitte wähle eine Dienstleistung aus.'
+  if (!f.service) e.service = 'Bitte wähle eine Website-Art aus.'
   if (f.details.trim().length < 20) e.details = 'Erzähl mir bitte etwas mehr (mindestens 20 Zeichen).'
   if (!f.privacy) e.privacy = 'Bitte bestätige die Datenschutzhinweise.'
   return e
@@ -57,7 +60,8 @@ function Field({ label, error, optional, children, id }: { label: string; error?
 
 type Status = { kind: 'idle' } | { kind: 'sending' } | { kind: 'sent' } | { kind: 'error'; message: string } | { kind: 'no-backend' }
 
-export default function Contact() {
+export function ContactSection() {
+  const go = useGoToSection()
   const uid = useId()
   const [f, setF] = useState<FormState>(empty)
   const [errors, setErrors] = useState<Errors>({})
@@ -68,6 +72,9 @@ export default function Contact() {
   useEffect(() => {
     const d = readInquiryDraft()
     if (d) setDraft(d)
+    const onDraft = (e: Event) => setDraft((e as CustomEvent<InquiryDraft>).detail)
+    window.addEventListener('inquiry:draft', onDraft)
+    return () => window.removeEventListener('inquiry:draft', onDraft)
   }, [])
 
   const set = <K extends keyof FormState>(k: K, v: FormState[K]) => {
@@ -78,14 +85,14 @@ export default function Contact() {
 
   const applyDraft = () => {
     if (!draft) return
-    const matched = services.find((s) => s.title === draft.service)
-    setF((p) => ({ ...p, service: matched ? matched.title : p.service, details: `${draft.summary}\n\n${p.details}`.trim() }))
+    const matched = serviceOptions.find((t) => draft.service?.includes(t) || draft.summary.includes(t))
+    setF((p) => ({ ...p, service: matched ?? p.service, details: `${draft.summary}\n\n${p.details}`.trim() }))
     clearInquiryDraft()
     setDraft(null)
   }
 
   const mailto = () => {
-    const body = [`Name: ${f.name}`, `Unternehmen: ${f.company || '–'}`, `E-Mail: ${f.email}`, `Dienstleistung: ${f.service}`, `Budget: ${f.budget || '–'}`, `Zeitraum: ${f.timeframe || '–'}`, '', f.details].join('\n')
+    const body = [`Name: ${f.name}`, `Unternehmen: ${f.company || '–'}`, `E-Mail: ${f.email}`, `Website-Art: ${f.service}`, `Budget: ${f.budget || '–'}`, `Zeitraum: ${f.timeframe || '–'}`, '', f.details].join('\n')
     return `mailto:${site.contact.email}?subject=${encodeURIComponent(`Projektanfrage: ${f.service || 'Website'}`)}&body=${encodeURIComponent(body)}`
   }
 
@@ -126,14 +133,11 @@ export default function Contact() {
   const aria = (k: keyof FormState) => ({ 'aria-invalid': !!errors[k], 'aria-describedby': errors[k] ? `${id(k)}-err` : undefined })
 
   return (
-    <section className="relative overflow-hidden bg-paper pb-24 pt-32 sm:pt-40">
-      <div className="pointer-events-none absolute -left-40 top-20 h-[34rem] w-[34rem] rounded-full bg-iris-soft/80 blur-3xl" aria-hidden="true" />
-      <div className="container-x grid gap-14 lg:grid-cols-[0.85fr_1.15fr]">
+    <div className="grid gap-14 lg:grid-cols-[0.85fr_1.15fr]">
         {/* Intro */}
         <div className="lg:sticky lg:top-28 lg:self-start">
           <p className="eyebrow text-muted">Kontakt & Projektanfrage</p>
-          <p className="script mt-6 text-6xl text-glut">Schön, dass du da bist</p>
-          <h1 className="display-lg mt-1">Erzähl mir von <span className="serif-accent text-glut">deinem Projekt.</span></h1>
+          <h2 className="display-lg mt-5">Erzähl mir von <span className="serif-accent text-glut">deinem Projekt.</span></h2>
           <p className="lead mt-6 text-muted">Ob fertige Vorstellung oder erste Idee: Schreib mir, was du vorhast. {site.contact.responseTime}</p>
           <div className="mt-10 flex items-center gap-4 rounded-3xl border border-ink/10 bg-white p-4">
             <div className="h-16 w-16 shrink-0 overflow-hidden rounded-2xl"><Portrait label={false} /></div>
@@ -147,12 +151,12 @@ export default function Contact() {
             <li className="flex items-center gap-3"><Icon name="phone" className="h-5 w-5 text-glut" />{site.contact.phoneHref ? <a href={site.contact.phoneHref}>{site.contact.phone}</a> : <span>{site.contact.phone}</span>}</li>
             <li className="flex items-center gap-3"><Icon name="map" className="h-5 w-5 text-glut" />{site.contact.region}</li>
           </ul>
-          <div className="mt-10 rounded-3xl bg-paper-2 p-6">
+          <div className="mt-10 rounded-3xl bg-white p-6">
             <p className="font-semibold">Noch unsicher, was du brauchst?</p>
             <p className="mt-2 text-sm text-muted">Mit dem Website-Finder oder dem Konfigurator kannst du deine Wünsche vorab sortieren – und das Ergebnis hier übernehmen.</p>
             <div className="mt-4 flex flex-wrap gap-2">
-              <Link to="/website-finder" className="chip border-ink/15 bg-white hover:border-ink">Website-Finder</Link>
-              <Link to="/leistungen/webdesign" className="chip border-ink/15 bg-white hover:border-ink">Konfigurator</Link>
+              <button type="button" onClick={() => go('konfigurator')} className="chip border-ink/15 bg-white hover:border-ink">Konfigurator</button>
+              <button type="button" onClick={() => document.getElementById('finder')?.scrollIntoView({ behavior: 'smooth', block: 'start' })} className="chip border-ink/15 bg-white hover:border-ink">Website-Finder</button>
             </div>
           </div>
         </div>
@@ -192,11 +196,10 @@ export default function Contact() {
               <Field label="E-Mail" id={id('email')} error={errors.email}>
                 <input id={id('email')} type="email" className="field" autoComplete="email" value={f.email} onChange={(e) => set('email', e.target.value)} {...aria('email')} />
               </Field>
-              <Field label="Gewünschte Dienstleistung" id={id('service')} error={errors.service}>
+              <Field label="Gewünschte Website-Art" id={id('service')} error={errors.service}>
                 <select id={id('service')} className="field appearance-none bg-[url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 12 12%22><path d=%22m3 4.5 3 3 3-3%22 stroke=%22%23222a21%22 stroke-width=%221.5%22 fill=%22none%22/></svg>')] bg-[length:14px] bg-[right_1rem_center] bg-no-repeat pr-10" value={f.service} onChange={(e) => set('service', e.target.value)} {...aria('service')}>
                   <option value="">Bitte wählen …</option>
-                  {services.map((s) => <option key={s.slug} value={s.title}>{s.title}</option>)}
-                  <option value="Noch unklar – Beratung gewünscht">Noch unklar – Beratung gewünscht</option>
+                  {serviceOptions.map((o) => <option key={o} value={o}>{o}</option>)}
                 </select>
               </Field>
               <Field label="Projektdetails" id={id('details')} error={errors.details}>
@@ -259,7 +262,6 @@ export default function Contact() {
             </form>
           )}
         </div>
-      </div>
-    </section>
+    </div>
   )
 }

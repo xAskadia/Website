@@ -5,9 +5,9 @@ import { cn } from '../../lib/cn'
 type Variant = 'primary' | 'secondary' | 'ghost' | 'light' | 'outline-light'
 
 const styles: Record<Variant, string> = {
-  primary: 'bg-glut text-white hover:bg-glut-dark shadow-[0_14px_34px_-14px_rgba(154,116,67,0.8)]',
-  secondary: 'bg-ink text-paper hover:bg-moss',
-  ghost: 'border border-ink/20 text-ink hover:border-ink hover:bg-ink hover:text-paper',
+  primary: 'bg-glut text-white hover:bg-glut-dark shadow-[0_14px_30px_-14px_rgba(47,122,95,0.75)]',
+  secondary: 'bg-ink text-white hover:bg-glut',
+  ghost: 'border border-ink/15 bg-white text-ink hover:border-ink',
   light: 'bg-paper text-ink hover:bg-white',
   'outline-light': 'border border-white/25 text-paper hover:border-paper hover:bg-paper hover:text-ink',
 }
@@ -35,8 +35,8 @@ export function Arrow({ className }: { className?: string }) {
 
 export function Button({ to, href, onClick, type = 'button', variant = 'primary', children, className, arrow = true, disabled, size = 'md' }: Props) {
   const cls = cn(
-    'group relative inline-flex items-center justify-center gap-3 overflow-hidden whitespace-nowrap rounded-full font-medium uppercase tracking-[0.16em] transition-all duration-500 ease-out active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-50',
-    size === 'lg' ? 'px-8 py-[1.1rem] text-[0.78rem]' : 'px-6 py-3.5 text-[0.72rem]',
+    'group relative inline-flex items-center justify-center gap-3 overflow-hidden whitespace-nowrap rounded-full font-medium transition-all duration-500 ease-out active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-50',
+    size === 'lg' ? 'px-7 py-4 text-base' : 'px-6 py-3 text-[0.95rem]',
     styles[variant],
     className,
   )

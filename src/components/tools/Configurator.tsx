@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { useMemo, useState, type ReactNode } from 'react'
-import { useNavigate } from 'react-router'
+import { useEffect, useMemo, useState, type ReactNode } from 'react'
+import { useGoToSection } from '../../lib/sections'
 import { pricing } from '../../content/pricing'
 import { saveInquiryDraft } from '../../lib/inquiry'
 import { cn } from '../../lib/cn'
@@ -109,7 +109,19 @@ function Choice({ active, onClick, title, text, icon }: { active: boolean; onCli
 export function Configurator() {
   const [step, setStep] = useState(0)
   const [c, setC] = useState<Config>(initial)
-  const navigate = useNavigate()
+  // Vorbelegung aus dem Angebots-Showcase („Im Konfigurator zusammenstellen“)
+  useEffect(() => {
+    const onPreset = (e: Event) => {
+      const type = (e as CustomEvent<{ type: string }>).detail.type
+      if (type === 'onepager') setC((p) => ({ ...p, type: 'onepager' }))
+      else if (type === 'landing') setC((p) => ({ ...p, type: 'onepager', animations: true }))
+      else setC((p) => ({ ...p, type: 'multipage' }))
+      setStep(type === 'relaunch' ? 0 : 1)
+    }
+    window.addEventListener('configurator:preset', onPreset)
+    return () => window.removeEventListener('configurator:preset', onPreset)
+  }, [])
+  const go = useGoToSection()
   const set = <K extends keyof Config>(k: K, v: Config[K]) => setC((p) => ({ ...p, [k]: v }))
   const price = useMemo(() => examplePrice(c), [c])
   const progress = ((step + 1) / steps.length) * 100
@@ -117,7 +129,7 @@ export function Configurator() {
 
   const takeOver = () => {
     saveInquiryDraft({ source: 'Website-Konfigurator', service: 'Webdesign & Website-Erstellung', summary: summarize(c).join('\n') })
-    navigate('/kontakt')
+    go('kontakt')
   }
 
   return (

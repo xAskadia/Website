@@ -10,19 +10,13 @@
  * füllen – dann werden diese statt der generierten Mockups angezeigt.
  */
 
-export type ProjectCategory =
-  | 'unternehmenswebsite'
-  | 'landingpage'
-  | 'konzept'
-  | 'grafikdesign'
-  | 'corporate-design'
+export type ProjectCategory = 'unternehmenswebsite' | 'onepager' | 'landingpage' | 'relaunch'
 
 export const categoryLabels: Record<ProjectCategory, string> = {
   unternehmenswebsite: 'Unternehmenswebsites',
+  onepager: 'Onepager',
   landingpage: 'Landingpages',
-  konzept: 'Webdesign-Konzepte',
-  grafikdesign: 'Grafikdesign',
-  'corporate-design': 'Corporate Design',
+  relaunch: 'Relaunches',
 }
 
 export interface MockTheme {
@@ -65,10 +59,10 @@ export const projects: Project[] = [
     slug: 'kornfeld-backstube',
     name: 'Kornfeld Backstube',
     isDemo: true,
-    categories: ['unternehmenswebsite', 'corporate-design'],
+    categories: ['unternehmenswebsite'],
     industry: 'Handwerk & Lebensmittel',
     summary: 'Eine warme, mehrseitige Website für eine fiktive Familienbäckerei mit Filialfinder und Vorbestellung.',
-    services: ['Webdesign', 'Seitenstruktur', 'Texte', 'Bildkonzept'],
+    services: ['Webdesign', 'Seitenstruktur', 'Texte', 'Umsetzung'],
     theme: {
       bg: '#f6eddc',
       fg: '#3b2412',
@@ -100,9 +94,9 @@ export const projects: Project[] = [
     slug: 'praxis-lindenhof',
     name: 'Physiopraxis Lindenhof',
     isDemo: true,
-    categories: ['unternehmenswebsite'],
+    categories: ['onepager'],
     industry: 'Gesundheit',
-    summary: 'Ruhige, vertrauensvolle Praxis-Website mit Leistungsübersicht, Team-Vorstellung und Terminanfrage.',
+    summary: 'Ruhiger, vertrauensvoller Onepager mit Leistungsübersicht, Team-Vorstellung und Terminanfrage.',
     services: ['Webdesign', 'UX-Konzept', 'Terminanfrage'],
     theme: {
       bg: '#eef3f0',
@@ -168,7 +162,7 @@ export const projects: Project[] = [
     slug: 'werkhaus-tischlerei',
     name: 'Werkhaus Tischlerei',
     isDemo: true,
-    categories: ['konzept', 'unternehmenswebsite'],
+    categories: ['relaunch'],
     industry: 'Handwerk',
     summary: 'Relaunch-Konzept: aus einer überladenen Website von gestern wird ein klarer, moderner Auftritt.',
     services: ['Relaunch', 'Informationsarchitektur', 'Webdesign'],
@@ -200,44 +194,10 @@ export const projects: Project[] = [
     },
   },
   {
-    slug: 'mohnblau-floristik',
-    name: 'Mohnblau Floristik',
-    isDemo: true,
-    categories: ['corporate-design', 'grafikdesign'],
-    industry: 'Einzelhandel',
-    summary: 'Corporate-Design-Konzept für ein fiktives Blumenatelier: Logo-Idee, Farben, Typografie und Social-Media-Vorlagen.',
-    services: ['Corporate Design', 'Farbkonzept', 'Social-Media-Grafiken'],
-    theme: {
-      bg: '#fbefe9',
-      fg: '#2c1d3a',
-      accent: '#d1495b',
-      soft: '#f1cfc7',
-      font: 'serif',
-      layout: 'editorial',
-      headline: 'Blumen mit Haltung.',
-      subline: 'Saisonale Sträuße, Hochzeitsfloristik und Workshops im Atelier.',
-      cta: 'Strauß anfragen',
-      nav: ['Atelier', 'Anlässe', 'Workshops'],
-      motif: 'circle',
-    },
-    case: {
-      ausgangssituation:
-        'Fiktives Szenario: Ein junges Atelier tritt auf Instagram, Flyern und Schaufenster jeweils anders auf – die Marke ist nicht wiedererkennbar.',
-      zielsetzung:
-        'Ein einheitliches visuelles System, das sich leicht im Alltag anwenden lässt.',
-      konzeption:
-        'Wenige, klare Regeln: zwei Schriften, vier Farben, ein Formelement. Dazu Vorlagen für die häufigsten Anlässe.',
-      design:
-        'Kräftiges Mohnrot trifft tiefes Violett. Eine elegante Serifenschrift für Headlines, kombiniert mit einer klaren Grotesk.',
-      ergebnis:
-        'Demo-Ergebnis: ein kompaktes Markenhandbuch mit Anwendungsbeispielen für Website, Social Media und Print.',
-    },
-  },
-  {
     slug: 'velo-atelier',
     name: 'Velo Atelier',
     isDemo: true,
-    categories: ['landingpage', 'konzept'],
+    categories: ['landingpage'],
     industry: 'Mobilität',
     summary: 'Landingpage-Konzept für ein fiktives Fahrrad-Service-Abo – mit klarer Preisstruktur und Buchungs-CTA.',
     services: ['Landingpage', 'Webdesign-Konzept'],

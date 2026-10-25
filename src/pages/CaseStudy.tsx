@@ -41,7 +41,7 @@ export default function CaseStudy() {
       <section ref={ref} className="relative overflow-hidden pb-20 pt-36 sm:pt-44" style={{ background: t.soft }}>
         <div className="container-x relative">
           <nav aria-label="Brotkrumen" className="mb-8 text-sm text-ink/60">
-            <Link to="/portfolio" className="hover:text-glut">← Alle Arbeiten</Link>
+            <Link to="/" state={{ scrollTo: 'arbeiten' }} className="hover:text-glut">← Alle Arbeiten</Link>
           </nav>
           <div className="flex flex-wrap items-center gap-3">
             {p.isDemo && <span className="demo-badge">Fiktives Demo-Projekt</span>}
@@ -71,7 +71,7 @@ export default function CaseStudy() {
             <ol className="flex gap-2 overflow-x-auto lg:flex-col lg:gap-1">
               {chapters.map((c, i) => (
                 <li key={c.key}>
-                  <a href={`#${c.key}`} onClick={(e) => { e.preventDefault(); document.getElementById(c.key)?.scrollIntoView({ behavior: 'smooth', block: 'center' }) }} className={cn('flex shrink-0 items-center gap-3 whitespace-nowrap rounded-full px-4 py-2 text-sm transition lg:rounded-xl', chapter === i ? 'bg-ink text-paper' : 'text-muted hover:text-ink')}>
+                  <a href={`#${c.key}`} onClick={(e) => { e.preventDefault(); document.getElementById(c.key)?.scrollIntoView({ behavior: 'smooth', block: 'center' }) }} className={cn('flex shrink-0 items-center gap-3 whitespace-nowrap rounded-full px-4 py-2 text-sm transition lg:rounded-xl', chapter === i ? 'bg-glut text-white' : 'text-muted hover:text-ink')}>
                     <span className="font-display text-xs">0{i + 1}</span>{c.label}
                   </a>
                 </li>
@@ -95,7 +95,7 @@ export default function CaseStudy() {
                     </div>
                     <div className="rounded-2xl p-6 ring-1 ring-ink/10" style={{ background: t.bg, color: t.fg }}>
                       <p className="text-xs uppercase tracking-wider opacity-60">Typografie</p>
-                      <p className="mt-3 text-4xl leading-none" style={{ fontFamily: t.font === 'serif' ? 'var(--font-display)' : t.font === 'rounded' ? 'ui-rounded, var(--font-sans)' : 'var(--font-sans)', fontWeight: t.font === 'serif' ? 420 : 600 }}>{t.headline}</p>
+                      <p className="mt-3 text-4xl leading-none" style={{ fontFamily: t.font === 'serif' ? 'var(--font-serif)' : t.font === 'rounded' ? 'ui-rounded, var(--font-sans)' : 'var(--font-sans)', fontWeight: t.font === 'serif' ? 420 : 600 }}>{t.headline}</p>
                     </div>
                   </Reveal>
                 )}
@@ -106,11 +106,11 @@ export default function CaseStudy() {
       </section>
 
       {/* Geräte */}
-      <section className="bg-ink py-24 text-paper">
+      <section className="bg-paper-2 py-24">
         <div className="container-x">
           <div className="flex flex-wrap items-end justify-between gap-6">
             <h2 className="display-md">Auf jedem Gerät <span className="serif-accent text-glut">zu Hause.</span></h2>
-            <DeviceSwitch value={device} onChange={setDevice} dark />
+            <DeviceSwitch value={device} onChange={setDevice} />
           </div>
           <div className="mt-12 rounded-[2rem] p-6 sm:p-12" style={{ background: t.soft }}>
             <motion.div key={device} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}><ProjectMock p={p} device={device} /></motion.div>
@@ -137,11 +137,15 @@ export default function CaseStudy() {
               <span className="text-sm opacity-60">Nächstes Projekt</span>
               <span className="mt-2 block font-display text-4xl font-semibold tracking-tight sm:text-6xl">{next.name}</span>
             </span>
-            <span className="grid h-16 w-16 place-items-center rounded-full bg-ink text-paper transition-transform group-hover:translate-x-2"><Arrow className="h-6 w-6" /></span>
+            <span className="grid h-16 w-16 place-items-center rounded-full bg-ink text-white transition-transform group-hover:translate-x-2"><Arrow className="h-6 w-6" /></span>
           </Link>
         </div>
       </section>
-      <CtaBand title="Lust auf ein" accent="eigenes Projekt?" />
+      <section className="bg-white pb-24">
+        <div className="container-x">
+          <CtaBand title="Lust auf ein" accent="eigenes Projekt?" />
+        </div>
+      </section>
     </>
   )
 }

@@ -1,69 +1,51 @@
 import { Link } from 'react-router'
-import { services } from '../../content/services'
+import { sections } from '../../content/sections'
 import { site } from '../../content/site'
-import { VelocityMarquee } from '../story/VelocityMarquee'
+import { useGoToSection } from '../../lib/sections'
 import { Logo } from '../ui/Logo'
-import { mainNav } from './Header'
 
 export function Footer() {
   const year = new Date().getFullYear()
+  const go = useGoToSection()
   const socials = site.social.filter((s) => s.href)
   return (
-    <footer className="relative overflow-hidden bg-ink text-paper">
-      <div className="container-x relative pt-20">
-        <div className="grid gap-12 lg:grid-cols-[1.3fr_1fr_1fr_1fr]">
+    <footer className="relative bg-paper-2">
+      <div className="supergraphic h-1 w-full" aria-hidden="true" />
+      <div className="container-x py-16">
+        <div className="grid gap-12 md:grid-cols-[1.4fr_1fr_1fr]">
           <div>
-            <Logo light />
-            <p className="mt-6 max-w-sm leading-relaxed text-white/60">
-              Websites, Design und Kommunikation für Unternehmen, die online so überzeugen wollen wie im persönlichen Gespräch.
-            </p>
-            <a href={`mailto:${site.contact.email}`} className="mt-6 inline-block font-display text-2xl italic underline decoration-glut decoration-1 underline-offset-[8px] transition hover:text-glut">
+            <Logo />
+            <p className="mt-6 max-w-sm leading-relaxed text-muted">Individuelle Websites für Unternehmen, die online so überzeugen wollen wie im persönlichen Gespräch.</p>
+            <a href={`mailto:${site.contact.email}`} className="mt-5 inline-block text-lg font-medium text-glut underline-offset-4 hover:underline">
               {site.contact.email}
             </a>
           </div>
-          <nav aria-label="Leistungen">
-            <p className="eyebrow text-white/45">Leistungen</p>
-            <ul className="mt-5 space-y-3 text-white/75">
-              {services.map((s) => (
-                <li key={s.slug}>
-                  <Link to={s.path} className="transition hover:text-glut">{s.navTitle}</Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-          <nav aria-label="Seiten">
-            <p className="eyebrow text-white/45">Entdecken</p>
-            <ul className="mt-5 space-y-3 text-white/75">
-              {[{ to: '/', label: 'Startseite' }, ...mainNav, { to: '/website-finder', label: 'Website-Finder' }, { to: '/kontakt', label: 'Kontakt' }].map((n) => (
-                <li key={n.to}>
-                  <Link to={n.to} className="transition hover:text-glut">{n.label}</Link>
+          <nav aria-label="Abschnitte">
+            <p className="text-sm font-semibold">Auf dieser Seite</p>
+            <ul className="mt-4 grid grid-cols-2 gap-x-6 gap-y-2.5 text-muted">
+              {sections.map((s) => (
+                <li key={s.id}>
+                  <a href={`/#${s.id}`} onClick={(e) => { e.preventDefault(); go(s.id) }} className="transition hover:text-glut">{s.label}</a>
                 </li>
               ))}
             </ul>
           </nav>
           <div>
-            <p className="eyebrow text-white/45">Kontakt</p>
-            <ul className="mt-5 space-y-3 text-white/75">
+            <p className="text-sm font-semibold">Kontakt</p>
+            <ul className="mt-4 space-y-2.5 text-muted">
               <li>{site.contact.region}</li>
               <li>{site.contact.phoneHref ? <a href={site.contact.phoneHref} className="hover:text-glut">{site.contact.phone}</a> : site.contact.phone}</li>
               {socials.map((s) => (
-                <li key={s.label}>
-                  <a href={s.href} target="_blank" rel="noopener noreferrer" className="hover:text-glut">{s.label} ↗</a>
-                </li>
+                <li key={s.label}><a href={s.href} target="_blank" rel="noopener noreferrer" className="hover:text-glut">{s.label} ↗</a></li>
               ))}
             </ul>
           </div>
         </div>
-
-      </div>
-      <VelocityMarquee items={['Deine Vision', 'Mein Design', 'Gemeinsam sichtbar']} baseVelocity={-2} outline className="mb-8 mt-20 py-4 text-[15vw] text-paper/20 lg:text-[10rem]" />
-      <div className="container-x relative pb-10">
-
-        <div className="flex flex-col gap-4 border-t border-white/10 pt-8 text-sm text-white/50 sm:flex-row sm:items-center sm:justify-between">
-          <p>© {year} {site.name}. Alle Rechte vorbehalten.</p>
-          <div className="flex gap-6">
-            <Link to="/impressum" className="hover:text-paper">Impressum</Link>
-            <Link to="/datenschutz" className="hover:text-paper">Datenschutz</Link>
+        <div className="mt-14 flex flex-col gap-4 border-t border-ink/10 pt-8 text-sm text-muted sm:flex-row sm:items-center sm:justify-between">
+          <p>© {year} {site.name}</p>
+          <div className="flex flex-wrap gap-6">
+            <Link to="/impressum" className="hover:text-ink">Impressum</Link>
+            <Link to="/datenschutz" className="hover:text-ink">Datenschutz</Link>
             <span>Ohne Tracking-Cookies</span>
           </div>
         </div>
