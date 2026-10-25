@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useState } from 'react'
+import { StoryStatement } from '../../components/story/StoryStatement'
 import { Button } from '../../components/ui/Button'
 import { CtaBand } from '../../components/ui/CtaBand'
 import { Icon, type IconName } from '../../components/ui/Icon'
@@ -135,7 +136,7 @@ export default function Projektbegleitung() {
     <>
       <PageHero
         crumbs={[{ to: '/leistungen', label: 'Leistungen' }, { to: '/leistungen/projektbegleitung', label: 'Kommunikation & Projektbegleitung' }]}
-        eyebrow="Leistung 06 · Unternehmenskommunikation & Projektbegleitung"
+        eyebrow="Leistung 06 · Unternehmenskommunikation & Projektbegleitung" kicker="Mit Plan & Herz" scene="dune"
         title="Kreativität braucht"
         accent="einen Plan."
         intro="Meine Erfahrung in Unternehmenskommunikation und digitalem Projektmanagement fließt in jedes Projekt ein. Du bekommst nicht nur ein gutes Ergebnis, sondern auch einen entspannten Weg dorthin."
@@ -143,6 +144,8 @@ export default function Projektbegleitung() {
         <Button onClick={() => scrollToId('ablauf')}>Projektablauf entdecken</Button>
         <Button to="/kontakt" variant="ghost">Projekt besprechen</Button>
       </PageHero>
+
+      <StoryStatement text="Gute Projekte fühlen sich *leicht* an – weil im Hintergrund jemand den *Überblick* behält." />
 
       <section className="bg-paper-2/60 py-24 sm:py-32">
         <div className="container-x">

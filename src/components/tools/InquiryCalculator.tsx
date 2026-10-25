@@ -12,7 +12,7 @@ function Slider({ label, value, min, max, step, onChange, display }: { label: st
         <span className="text-sm text-white/70">{label}</span>
         <span className="font-display text-3xl font-semibold tabular-nums">{display}</span>
       </label>
-      <input id={id} type="range" className="range mt-4" min={min} max={max} step={step} value={value} onChange={(e) => onChange(+e.target.value)} style={{ ['--fill' as string]: `${((value - min) / (max - min)) * 100}%`, background: `linear-gradient(to right, #e4572e var(--fill), rgba(255,255,255,0.15) var(--fill))` }} />
+      <input id={id} type="range" className="range mt-4" min={min} max={max} step={step} value={value} onChange={(e) => onChange(+e.target.value)} style={{ ['--fill' as string]: `${((value - min) / (max - min)) * 100}%`, background: `linear-gradient(to right, #9a7443 var(--fill), rgba(255,255,255,0.15) var(--fill))` }} />
       <div className="mt-1.5 flex justify-between text-xs text-white/40">
         <span>{fmt(min, step < 1 ? 1 : 0)}</span>
         <span>{fmt(max, step < 1 ? 1 : 0)}</span>
@@ -76,8 +76,8 @@ export function InquiryCalculator() {
             <svg viewBox={`0 0 ${W} ${H}`} className="h-auto w-full" role="img" aria-label={`Balkendiagramm: rechnerische Anfragen pro Monat, von ${fmt(data[0].inquiries, 1)} im ersten bis ${fmt(data[11].inquiries, 1)} im zwölften Monat.`} onMouseLeave={() => setHover(null)}>
               {ticks.map((t) => (
                 <g key={t}>
-                  <line x1={pad.l} x2={W - pad.r} y1={y(t)} y2={y(t)} stroke="#16131d" strokeOpacity={t === 0 ? 0.35 : 0.08} />
-                  <text x={pad.l - 8} y={y(t) + 4} textAnchor="end" fontSize="11" fill="#6d6676">{fmt(t, max < 8 ? 1 : 0)}</text>
+                  <line x1={pad.l} x2={W - pad.r} y1={y(t)} y2={y(t)} stroke="#222a21" strokeOpacity={t === 0 ? 0.35 : 0.08} />
+                  <text x={pad.l - 8} y={y(t) + 4} textAnchor="end" fontSize="11" fill="#6c6a5f">{fmt(t, max < 8 ? 1 : 0)}</text>
                 </g>
               ))}
               {data.map((d, i) => {
@@ -93,10 +93,10 @@ export function InquiryCalculator() {
                       initial={false}
                       animate={{ d: `M${x},${y(0)} V${top + r} Q${x},${top} ${x + r},${top} H${x + w - r} Q${x + w},${top} ${x + w},${top + r} V${y(0)} Z` }}
                       transition={{ type: 'spring', stiffness: 140, damping: 20 }}
-                      fill="#e4572e"
+                      fill="#9a7443"
                       fillOpacity={i === active ? 1 : 0.55}
                     />
-                    <text x={x + w / 2} y={H - 8} textAnchor="middle" fontSize="11" fill="#6d6676">{d.m}</text>
+                    <text x={x + w / 2} y={H - 8} textAnchor="middle" fontSize="11" fill="#6c6a5f">{d.m}</text>
                   </g>
                 )
               })}

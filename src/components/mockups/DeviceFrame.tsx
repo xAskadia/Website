@@ -16,7 +16,7 @@ interface Props {
 export function DeviceFrame({ device = 'desktop', url = 'deine-website.de', children, className, dark, aspect = '16 / 10.5' }: Props) {
   if (device === 'desktop') {
     return (
-      <div className={cn('overflow-hidden rounded-[14px] border shadow-[0_40px_80px_-30px_rgba(22,19,29,0.45)]', dark ? 'border-white/10 bg-ink-2' : 'border-ink/10 bg-white', className)}>
+      <div className={cn('overflow-hidden rounded-[14px] border shadow-[0_40px_80px_-30px_rgba(34,42,33,0.45)]', dark ? 'border-white/10 bg-ink-2' : 'border-ink/10 bg-white', className)}>
         <div className={cn('flex items-center gap-3 border-b px-3 py-2', dark ? 'border-white/10' : 'border-ink/10 bg-paper/70')}>
           <div className="flex gap-1.5" aria-hidden="true">
             <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
@@ -39,7 +39,7 @@ export function DeviceFrame({ device = 'desktop', url = 'deine-website.de', chil
   }
   if (device === 'tablet') {
     return (
-      <div className={cn('rounded-[28px] bg-ink p-[10px] shadow-[0_40px_80px_-30px_rgba(22,19,29,0.55)] ring-1 ring-white/10', className)}>
+      <div className={cn('rounded-[28px] bg-ink p-[10px] shadow-[0_40px_80px_-30px_rgba(34,42,33,0.55)] ring-1 ring-white/10', className)}>
         <div className="relative overflow-hidden rounded-[18px] bg-white" style={{ containerType: 'inline-size', aspectRatio: '3 / 4' }}>
           {children}
         </div>
@@ -47,7 +47,7 @@ export function DeviceFrame({ device = 'desktop', url = 'deine-website.de', chil
     )
   }
   return (
-    <div className={cn('rounded-[34px] bg-ink p-[8px] shadow-[0_40px_80px_-30px_rgba(22,19,29,0.55)] ring-1 ring-white/10', className)}>
+    <div className={cn('rounded-[34px] bg-ink p-[8px] shadow-[0_40px_80px_-30px_rgba(34,42,33,0.55)] ring-1 ring-white/10', className)}>
       <div className="relative overflow-hidden rounded-[27px] bg-white" style={{ containerType: 'inline-size', aspectRatio: '9 / 19' }}>
         <div className="absolute left-1/2 top-[7px] z-10 h-[16px] w-[32%] -translate-x-1/2 rounded-full bg-ink" aria-hidden="true" />
         <div className="h-full pt-[24px]">{children}</div>

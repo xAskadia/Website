@@ -11,8 +11,8 @@ const palettes = [
 ] as const
 
 const fonts = [
-  { key: 'serif', label: 'Klassisch', sample: 'Serifen', head: 'var(--font-serif)', weight: 400, track: '-0.01em' },
-  { key: 'grotesk', label: 'Modern', sample: 'Grotesk', head: 'var(--font-display)', weight: 650, track: '-0.04em' },
+  { key: 'serif', label: 'Elegant', sample: 'Serifen', head: 'var(--font-display)', weight: 420, track: '-0.01em' },
+  { key: 'grotesk', label: 'Modern', sample: 'Grotesk', head: 'var(--font-sans)', weight: 600, track: '-0.03em' },
   { key: 'rund', label: 'Freundlich', sample: 'Rund', head: 'ui-rounded, "SF Pro Rounded", var(--font-sans)', weight: 700, track: '-0.02em' },
   { key: 'mono', label: 'Technisch', sample: 'Mono', head: 'ui-monospace, "SF Mono", Menlo, monospace', weight: 600, track: '-0.03em' },
 ] as const

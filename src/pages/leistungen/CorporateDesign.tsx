@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { BrandExplorer } from '../../components/tools/BrandExplorer'
+import { StoryStatement } from '../../components/story/StoryStatement'
 import { Button } from '../../components/ui/Button'
 import { CtaBand } from '../../components/ui/CtaBand'
 import { Icon, type IconName } from '../../components/ui/Icon'
@@ -25,7 +26,7 @@ export default function CorporateDesign() {
     <>
       <PageHero
         crumbs={[{ to: '/leistungen', label: 'Leistungen' }, { to: '/leistungen/corporate-design', label: 'Grafik- & Corporate Design' }]}
-        eyebrow="Leistung 04 · Grafikdesign & Corporate Design"
+        eyebrow="Leistung 04 · Grafikdesign & Corporate Design" kicker="Deine Marke"
         title="Eine starke Marke ist mehr als"
         accent="eine schöne Website."
         intro="Deine Kundinnen und Kunden begegnen dir an vielen Orten – online und offline. Ich sorge dafür, dass du überall erkennbar bist und überall gleich überzeugend wirkst."
@@ -46,12 +47,12 @@ export default function CorporateDesign() {
                 </motion.span>
               )
             })}
-            <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.3, type: 'spring', stiffness: 120 }} className="absolute left-1/2 top-1/2 grid h-32 w-32 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-glut font-display text-xl font-semibold text-white shadow-[0_20px_60px_-15px_rgba(228,87,46,0.7)]">
+            <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.3, type: 'spring', stiffness: 120 }} className="absolute left-1/2 top-1/2 grid h-32 w-32 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-glut font-display text-xl font-semibold text-white shadow-[0_20px_60px_-15px_rgba(154,116,67,0.7)]">
               Deine Marke
             </motion.div>
             <svg viewBox="0 0 100 100" className="absolute inset-0 -z-10 h-full w-full">
-              <circle cx="50" cy="50" r="40" fill="none" stroke="#16131d" strokeOpacity=".12" strokeDasharray="1.5 2" />
-              <circle cx="50" cy="50" r="24" fill="none" stroke="#e4572e" strokeOpacity=".25" />
+              <circle cx="50" cy="50" r="40" fill="none" stroke="#222a21" strokeOpacity=".12" strokeDasharray="1.5 2" />
+              <circle cx="50" cy="50" r="24" fill="none" stroke="#9a7443" strokeOpacity=".25" />
             </svg>
           </div>
         }
@@ -59,6 +60,8 @@ export default function CorporateDesign() {
         <Button onClick={() => scrollToId('explorer')}>Brand-Style-Explorer</Button>
         <Button to="/kontakt" variant="ghost">Design anfragen</Button>
       </PageHero>
+
+      <StoryStatement text="Eine Marke ist das *Gefühl,* das bleibt, wenn man dich gesehen hat. Ich gebe diesem Gefühl Farbe, Form und eine *klare Linie.*" />
 
       <section className="bg-paper-2/60 py-24 sm:py-32">
         <div className="container-x">

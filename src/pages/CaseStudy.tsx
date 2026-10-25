@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion, useTransform } from 'framer-motion'
 import { useRef, useState } from 'react'
 import { Link, useParams } from 'react-router'
 import { DeviceFrame } from '../components/mockups/DeviceFrame'
@@ -12,6 +12,7 @@ import { categoryLabels, projectBySlug, projects } from '../content/projects'
 import { cn } from '../lib/cn'
 import NotFound from './NotFound'
 import { DeviceSwitch, ProjectMock } from '../components/mockups/ProjectMock'
+import { useScrollProgress } from '../lib/motion'
 
 const chapters = [
   { key: 'ausgangssituation', label: 'Ausgangssituation' },
@@ -25,7 +26,7 @@ export default function CaseStudy() {
   const { slug = '' } = useParams()
   const p = projectBySlug(slug)
   const ref = useRef<HTMLElement>(null)
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
+  const { scrollYProgress } = useScrollProgress({ target: ref, offset: ['start start', 'end start'] })
   const y = useTransform(scrollYProgress, [0, 1], ['0%', '18%'])
   const [device, setDevice] = useState<Device>('desktop')
   const [chapter, setChapter] = useState(0)
@@ -94,7 +95,7 @@ export default function CaseStudy() {
                     </div>
                     <div className="rounded-2xl p-6 ring-1 ring-ink/10" style={{ background: t.bg, color: t.fg }}>
                       <p className="text-xs uppercase tracking-wider opacity-60">Typografie</p>
-                      <p className="mt-3 text-4xl leading-none" style={{ fontFamily: t.font === 'serif' ? 'var(--font-serif)' : t.font === 'rounded' ? 'ui-rounded, var(--font-sans)' : 'var(--font-display)', fontWeight: t.font === 'serif' ? 400 : 650 }}>{t.headline}</p>
+                      <p className="mt-3 text-4xl leading-none" style={{ fontFamily: t.font === 'serif' ? 'var(--font-display)' : t.font === 'rounded' ? 'ui-rounded, var(--font-sans)' : 'var(--font-sans)', fontWeight: t.font === 'serif' ? 420 : 600 }}>{t.headline}</p>
                     </div>
                   </Reveal>
                 )}

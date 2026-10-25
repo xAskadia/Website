@@ -4,6 +4,7 @@ import { DeviceFrame } from '../../components/mockups/DeviceFrame'
 import { MiniSite } from '../../components/mockups/MiniSite'
 import { OldSite } from '../../components/mockups/OldSite'
 import { BeforeAfter } from '../../components/ui/BeforeAfter'
+import { StoryStatement } from '../../components/story/StoryStatement'
 import { Button } from '../../components/ui/Button'
 import { CtaBand } from '../../components/ui/CtaBand'
 import { Icon, type IconName } from '../../components/ui/Icon'
@@ -36,7 +37,7 @@ function SelfCheck() {
           const on = checked.includes(i)
           return (
             <li key={p.title}>
-              <button type="button" role="checkbox" aria-checked={on} onClick={() => toggle(i)} className={cn('group relative flex h-full w-full flex-col overflow-hidden rounded-4xl border p-6 text-left transition-all duration-300', on ? 'border-glut bg-white shadow-[0_20px_50px_-30px_rgba(228,87,46,0.6)]' : 'border-ink/10 bg-white hover:border-ink/30')}>
+              <button type="button" role="checkbox" aria-checked={on} onClick={() => toggle(i)} className={cn('group relative flex h-full w-full flex-col overflow-hidden rounded-4xl border p-6 text-left transition-all duration-300', on ? 'border-glut bg-white shadow-[0_20px_50px_-30px_rgba(154,116,67,0.6)]' : 'border-ink/10 bg-white hover:border-ink/30')}>
                 <span className="flex items-center justify-between">
                   <Icon name={p.icon} className={cn('h-7 w-7 transition-colors', on ? 'text-glut' : 'text-ink/50')} />
                   <span className={cn('grid h-7 w-7 place-items-center rounded-lg border-2 transition', on ? 'border-glut bg-glut text-white' : 'border-ink/20')}>{on && <Icon name="check" className="h-4 w-4" />}</span>
@@ -67,7 +68,7 @@ function SelfCheck() {
           <p className="mt-1 text-sm text-white/60">Punkte treffen auf deine Website zu</p>
           <div className="mt-6 flex gap-1.5" aria-hidden="true">
             {problems.map((_, i) => (
-              <motion.span key={i} className="h-2 flex-1 rounded-full" animate={{ backgroundColor: i < n ? '#e4572e' : 'rgba(255,255,255,0.12)' }} />
+              <motion.span key={i} className="h-2 flex-1 rounded-full" animate={{ backgroundColor: i < n ? '#9a7443' : 'rgba(255,255,255,0.12)' }} />
             ))}
           </div>
           <div aria-live="polite" className="mt-6 min-h-[7.5rem]">
@@ -102,7 +103,7 @@ export default function Relaunch() {
     <>
       <PageHero
         crumbs={[{ to: '/leistungen', label: 'Leistungen' }, { to: '/leistungen/relaunch', label: 'Relaunch & Optimierung' }]}
-        eyebrow="Leistung 03 · Relaunch & Optimierung"
+        eyebrow="Leistung 03 · Relaunch & Optimierung" kicker="Neu erblühen" scene="meadow"
         title="Aus alt wird"
         accent="überzeugend."
         intro="Deine Website ist in die Jahre gekommen? Dann verschenkt sie vermutlich Potenzial. Ich analysiere, was sie ausbremst, und mache aus ihr wieder ein Aushängeschild."
@@ -110,6 +111,8 @@ export default function Relaunch() {
         <Button onClick={() => scrollToId('vergleich')}>Vorher-Nachher ansehen</Button>
         <Button to="/kontakt" variant="ghost">Relaunch anfragen</Button>
       </PageHero>
+
+      <StoryStatement text="Was einmal gut war, darf *wachsen.* Ein Relaunch bewahrt deine Stärken und gibt ihnen eine *neue Bühne.*" />
 
       <section id="vergleich" tabIndex={-1} className="scroll-mt-24 bg-ink py-24 text-paper outline-none sm:py-32">
         <div className="container-x">

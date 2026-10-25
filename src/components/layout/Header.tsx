@@ -15,7 +15,7 @@ export const mainNav = [
 ]
 
 /** Seiten, deren oberer Bereich dunkel ist – Header startet dort mit heller Schrift. */
-const darkTop = ['/', '/leistungen/online-marketing', '/arbeitsweise', '/website-finder']
+const darkTop = ['/leistungen/online-marketing', '/arbeitsweise', '/website-finder']
 
 export function Header() {
   const { pathname } = useLocation()
@@ -72,7 +72,7 @@ export function Header() {
 
   const linkCls = (active: boolean) =>
     cn(
-      'relative rounded-full px-4 py-2 text-[0.93rem] font-medium transition-colors',
+      'relative whitespace-nowrap rounded-full px-2.5 py-2 text-[0.68rem] font-medium uppercase tracking-[0.16em] transition-colors xl:px-3.5',
       light ? 'text-white/80 hover:text-white' : 'text-ink/75 hover:text-ink',
       active && (light ? 'text-white' : 'text-ink'),
     )
@@ -92,7 +92,7 @@ export function Header() {
             </Link>
 
             <nav aria-label="Hauptnavigation" className="hidden items-center lg:flex">
-              <NavLink to="/" end className={({ isActive }) => linkCls(isActive)}>
+              <NavLink to="/" end className={({ isActive }) => cn(linkCls(isActive), 'hidden xl:inline-block')}>
                 Start
               </NavLink>
               <div onMouseEnter={openMega} onMouseLeave={closeMegaSoon} className="relative">
@@ -123,7 +123,7 @@ export function Header() {
 
             <div className="flex items-center gap-2">
               <span className="hidden sm:block">
-                <Button to="/kontakt" variant={light ? 'light' : 'secondary'} className="!px-5 !py-3 text-sm">
+                <Button to="/kontakt" variant={light ? 'light' : 'secondary'} className="whitespace-nowrap !px-5 !py-3">
                   Projekt anfragen
                 </Button>
               </span>
@@ -156,7 +156,7 @@ export function Header() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-              className="absolute inset-x-0 top-full hidden border-b border-ink/10 bg-paper/95 shadow-[0_40px_60px_-40px_rgba(22,19,29,0.35)] backdrop-blur-xl lg:block"
+              className="absolute inset-x-0 top-full hidden border-b border-ink/10 bg-paper/95 shadow-[0_40px_60px_-40px_rgba(34,42,33,0.35)] backdrop-blur-xl lg:block"
             >
               <div className="container-x grid grid-cols-[1fr_340px] gap-10 py-10">
                 <div>
@@ -180,7 +180,7 @@ export function Header() {
                             <span className="font-display text-sm font-semibold text-glut">{s.number}</span>
                             <Arrow className="-translate-x-2 text-glut opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100" />
                           </span>
-                          <span className="mt-3 font-display text-lg font-semibold leading-tight tracking-tight">{s.navTitle}</span>
+                          <span className="mt-3 font-display text-xl leading-tight">{s.navTitle}</span>
                           <span className="mt-2 line-clamp-2 text-sm leading-snug text-muted">{s.teaser}</span>
                           <span className="mt-4 inline-flex w-fit items-center gap-1.5 rounded-full bg-iris-soft/70 px-2.5 py-1 text-[0.7rem] font-medium text-ink/80">
                             <span aria-hidden="true">◆</span> {s.tool}
@@ -191,10 +191,10 @@ export function Header() {
                   </ul>
                 </div>
                 <Link to="/website-finder" className="group relative flex flex-col justify-between overflow-hidden rounded-4xl bg-ink p-7 text-paper">
-                  <div className="absolute -right-16 -top-16 h-56 w-56 rounded-full bg-glut/80 blur-2xl transition-transform duration-700 group-hover:scale-125" aria-hidden="true" />
+                  <div className="absolute -right-16 -top-16 h-56 w-56 rounded-full bg-iris/50 blur-2xl transition-transform duration-700 group-hover:scale-125" aria-hidden="true" />
                   <div className="relative">
                     <p className="eyebrow text-white/60">Interaktiv</p>
-                    <p className="mt-4 font-display text-[1.7rem] font-semibold leading-[1.05] tracking-tight">Welche Website passt zu deinem Unternehmen?</p>
+                    <p className="script mt-4 text-4xl text-sand">Finde es heraus</p><p className="mt-1 font-display text-[1.8rem] leading-[1.05]">Welche Website passt zu deinem Unternehmen?</p>
                   </div>
                   <span className="relative mt-8 inline-flex items-center gap-2 text-sm font-semibold">
                     Website-Finder starten <Arrow className="transition-transform group-hover:translate-x-1" />
@@ -230,7 +230,7 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
           animate={{ clipPath: 'circle(150% at 92% 4%)' }}
           exit={{ clipPath: 'circle(0% at 92% 4%)' }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="fixed inset-0 z-[60] overflow-y-auto bg-ink text-paper lg:hidden"
+          className="fixed inset-0 z-[60] overflow-y-auto bg-moss text-paper lg:hidden"
         >
           <div className="container-x flex h-[76px] items-center justify-between">
             <Link to="/" onClick={onClose} aria-label="Zur Startseite">
@@ -249,7 +249,7 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
                   type="button"
                   onClick={() => setSub((s) => !s)}
                   aria-expanded={sub}
-                  className="flex w-full items-center justify-between py-3 font-display text-4xl font-semibold tracking-tight"
+                  className="flex w-full items-center justify-between py-3 font-display text-4xl"
                 >
                   Leistungen
                   <span className={cn('grid h-10 w-10 place-items-center rounded-full border border-white/20 text-base transition-transform', sub && 'rotate-45 bg-glut border-glut')} aria-hidden="true">
@@ -278,7 +278,7 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
               </li>
               {items.map((n, i) => (
                 <motion.li key={n.to} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.15 + i * 0.05 }}>
-                  <NavLink to={n.to} end className={({ isActive }) => cn('block py-3 font-display text-4xl font-semibold tracking-tight', isActive && 'text-glut')}>
+                  <NavLink to={n.to} end className={({ isActive }) => cn('block py-3 font-display text-4xl', isActive && 'serif-accent text-sand')}>
                     {n.label}
                   </NavLink>
                 </motion.li>

@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { useState } from 'react'
 import { LandingPreview } from '../../components/tools/LandingPreview'
+import { StoryStatement } from '../../components/story/StoryStatement'
 import { Button } from '../../components/ui/Button'
 import { CtaBand } from '../../components/ui/CtaBand'
 import { Icon, type IconName } from '../../components/ui/Icon'
@@ -62,15 +63,15 @@ function Compare() {
         <svg viewBox="0 0 300 300" className="h-full w-full">
           {isWeb ? (
             <g>
-              <motion.rect initial={{ scale: 0 }} animate={{ scale: 1 }} x="115" y="30" width="70" height="50" rx="10" fill="#e4572e" />
+              <motion.rect initial={{ scale: 0 }} animate={{ scale: 1 }} x="115" y="30" width="70" height="50" rx="10" fill="#9a7443" />
               {[40, 115, 190].map((x, i) => (
                 <g key={x}>
-                  <motion.path initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ delay: 0.2 + i * 0.1 }} d={`M150 80 V110 H${x + 35} V135`} stroke="#f5f1ea" strokeOpacity=".35" fill="none" strokeWidth="2" />
-                  <motion.rect initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 + i * 0.1 }} x={x} y="135" width="70" height="44" rx="8" fill="#f5f1ea" />
+                  <motion.path initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ delay: 0.2 + i * 0.1 }} d={`M150 80 V110 H${x + 35} V135`} stroke="#f4efe6" strokeOpacity=".35" fill="none" strokeWidth="2" />
+                  <motion.rect initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 + i * 0.1 }} x={x} y="135" width="70" height="44" rx="8" fill="#f4efe6" />
                   {[0, 1].map((j) => (
                     <g key={j}>
-                      <motion.path initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ delay: 0.5 + i * 0.1 }} d={`M${x + 35} 179 V200 H${x + 15 + j * 40} V215`} stroke="#f5f1ea" strokeOpacity=".25" fill="none" strokeWidth="1.5" />
-                      <motion.rect initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.65 + i * 0.1 }} x={x + 2 + j * 40} y="215" width="28" height="22" rx="5" fill="#a99cf0" />
+                      <motion.path initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ delay: 0.5 + i * 0.1 }} d={`M${x + 35} 179 V200 H${x + 15 + j * 40} V215`} stroke="#f4efe6" strokeOpacity=".25" fill="none" strokeWidth="1.5" />
+                      <motion.rect initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.65 + i * 0.1 }} x={x + 2 + j * 40} y="215" width="28" height="22" rx="5" fill="#8f9e83" />
                     </g>
                   ))}
                 </g>
@@ -79,10 +80,10 @@ function Compare() {
           ) : (
             <g>
               {[0, 1, 2, 3].map((i) => (
-                <motion.rect key={i} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.1 }} x={60 + i * 12} y={40 + i * 48} width={180 - i * 24} height="36" rx="10" fill={i === 3 ? '#e4572e' : '#f5f1ea'} fillOpacity={i === 3 ? 1 : 0.9 - i * 0.2} />
+                <motion.rect key={i} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.1 }} x={60 + i * 12} y={40 + i * 48} width={180 - i * 24} height="36" rx="10" fill={i === 3 ? '#9a7443' : '#f4efe6'} fillOpacity={i === 3 ? 1 : 0.9 - i * 0.2} />
               ))}
-              <motion.path initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ delay: 0.5, duration: 0.8 }} d="M150 20 V250" stroke="#e4572e" strokeWidth="2" strokeDasharray="4 6" fill="none" />
-              <motion.circle initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 1 }} cx="150" cy="262" r="12" fill="#e4572e" />
+              <motion.path initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ delay: 0.5, duration: 0.8 }} d="M150 20 V250" stroke="#9a7443" strokeWidth="2" strokeDasharray="4 6" fill="none" />
+              <motion.circle initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 1 }} cx="150" cy="262" r="12" fill="#9a7443" />
             </g>
           )}
         </svg>
@@ -96,7 +97,7 @@ export default function Landingpages() {
     <>
       <PageHero
         crumbs={[{ to: '/leistungen', label: 'Leistungen' }, { to: '/leistungen/landingpages', label: 'Landingpages' }]}
-        eyebrow="Leistung 02 · Landingpages"
+        eyebrow="Leistung 02 · Landingpages" kicker="Fokus" scene="sea"
         title="Eine Seite. Ein Ziel."
         accent="Mehr Anfragen."
         intro="Landingpages sind fokussierte Einzelseiten, die genau eine Aufgabe haben: Menschen von einem Angebot überzeugen und zur nächsten Handlung führen."
@@ -104,6 +105,8 @@ export default function Landingpages() {
         <Button onClick={() => scrollToId('vorschau')}>Vorschau ausprobieren</Button>
         <Button to="/kontakt" variant="ghost">Landingpage anfragen</Button>
       </PageHero>
+
+      <StoryStatement text="Eine gute Landingpage stellt *eine* Frage und gibt *eine* klare Antwort. Alles andere darf warten." />
 
       <section className="bg-paper-2/60 py-24 sm:py-32">
         <div className="container-x">

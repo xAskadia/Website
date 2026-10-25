@@ -1,4 +1,4 @@
-import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import { useRef, useState, type ReactNode } from 'react'
 import { DeviceFrame } from '../components/mockups/DeviceFrame'
 import { MiniSite } from '../components/mockups/MiniSite'
@@ -8,8 +8,12 @@ import { Icon, type IconName } from '../components/ui/Icon'
 import { PageHero } from '../components/ui/PageHero'
 import { projects } from '../content/projects'
 import { cn } from '../lib/cn'
+import { useScrollProgress } from '../lib/motion'
 
 const theme = projects[1].theme
+
+/** Rankende Linie entlang der Zeitachse – wächst mit dem Scrollen. */
+const vine = 'M20 0 ' + Array.from({ length: 20 }, (_, i) => `Q ${i % 2 ? 4 : 36} ${i * 50 + 25}, 20 ${(i + 1) * 50}`).join(' ')
 
 const Artifact = {
   Briefing: () => (
@@ -87,14 +91,13 @@ const phases: { t: string; icon: IconName; short: string; long: string; tasks: s
 
 export default function Process() {
   const ref = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start 60%', 'end 60%'] })
-  const fill = useTransform(scrollYProgress, [0, 1], ['0%', '100%'])
+  const { scrollYProgress } = useScrollProgress({ target: ref, offset: ['start 60%', 'end 60%'] })
   const [active, setActive] = useState(0)
   const [open, setOpen] = useState<number | null>(0)
 
   return (
     <>
-      <PageHero dark eyebrow="Meine Arbeitsweise" title="Sechs Phasen." accent="Null Rätselraten." intro="Transparenz ist für mich kein Extra, sondern Grundlage. Hier siehst du genau, wie wir gemeinsam von der ersten Idee zur fertigen Website kommen – und was in jeder Phase entsteht.">
+      <PageHero dark eyebrow="Meine Arbeitsweise" kicker="Gemeinsam" scene="forest" title="Sechs Phasen." accent="Null Rätselraten." intro="Transparenz ist für mich kein Extra, sondern Grundlage. Hier siehst du genau, wie wir gemeinsam von der ersten Idee zur fertigen Website kommen – und was in jeder Phase entsteht.">
         <Button to="/kontakt">Mit Phase 1 starten</Button>
       </PageHero>
 
@@ -112,8 +115,11 @@ export default function Process() {
 
       <section className="bg-paper py-20 sm:py-28">
         <div ref={ref} className="container-x relative">
-          <div className="absolute bottom-0 left-[2.65rem] top-0 w-[2px] bg-ink/10 sm:left-[3.65rem]" aria-hidden="true">
-            <motion.div className="w-full bg-glut" style={{ height: fill }} />
+          <div className="absolute bottom-0 left-[2.65rem] top-0 w-10 -translate-x-1/2 sm:left-[3.65rem]" aria-hidden="true">
+            <svg viewBox="0 0 40 1000" preserveAspectRatio="none" className="h-full w-full overflow-visible">
+              <path d={vine} fill="none" stroke="#222a21" strokeOpacity=".1" strokeWidth="1.5" vectorEffect="non-scaling-stroke" />
+              <motion.path d={vine} fill="none" stroke="#9a7443" strokeWidth="2" vectorEffect="non-scaling-stroke" style={{ pathLength: scrollYProgress }} />
+            </svg>
           </div>
           <ol className="space-y-10">
             {phases.map((p, i) => {
@@ -121,11 +127,11 @@ export default function Process() {
               return (
                 <motion.li key={p.t} id={`phase-${i}`} onViewportEnter={() => setActive(i)} viewport={{ amount: 0.5 }} className="relative grid grid-cols-[3.5rem_1fr] gap-5 sm:grid-cols-[5.5rem_1fr] sm:gap-8">
                   <div className="relative z-10 flex justify-center">
-                    <motion.span animate={{ scale: active === i ? 1.1 : 1, backgroundColor: active >= i ? '#e4572e' : '#f5f1ea', color: active >= i ? '#ffffff' : '#16131d' }} className="grid h-14 w-14 place-items-center rounded-full border-4 border-paper font-display text-lg font-semibold shadow-[0_0_0_1px_rgba(22,19,29,0.12)] sm:h-[4.5rem] sm:w-[4.5rem] sm:text-xl">
+                    <motion.span animate={{ scale: active === i ? 1.1 : 1, backgroundColor: active >= i ? '#9a7443' : '#f4efe6', color: active >= i ? '#ffffff' : '#222a21' }} className="grid h-14 w-14 place-items-center rounded-full border-4 border-paper font-display text-lg font-semibold shadow-[0_0_0_1px_rgba(34,42,33,0.12)] sm:h-[4.5rem] sm:w-[4.5rem] sm:text-xl">
                       0{i + 1}
                     </motion.span>
                   </div>
-                  <div className={cn('rounded-[2rem] border bg-white p-6 transition-all duration-500 sm:p-9', active === i ? 'border-ink/20 shadow-[0_30px_60px_-40px_rgba(22,19,29,0.45)]' : 'border-ink/10')}>
+                  <div className={cn('rounded-[2rem] border bg-white p-6 transition-all duration-500 sm:p-9', active === i ? 'border-ink/20 shadow-[0_30px_60px_-40px_rgba(34,42,33,0.45)]' : 'border-ink/10')}>
                     <div className="flex flex-wrap items-start justify-between gap-4">
                       <div className="max-w-2xl">
                         <span className="flex items-center gap-2 text-sm text-muted"><Icon name={p.icon} className="h-5 w-5 text-glut" /> Phase {i + 1}</span>

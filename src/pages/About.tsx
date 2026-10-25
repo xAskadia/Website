@@ -1,12 +1,18 @@
-import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion'
+import { AnimatePresence, motion, useTransform } from 'framer-motion'
 import { useRef, useState } from 'react'
 import { Button } from '../components/ui/Button'
 import { CtaBand } from '../components/ui/CtaBand'
 import { Icon, type IconName } from '../components/ui/Icon'
 import { Portrait } from '../components/ui/Portrait'
+import { ArchFrame } from '../components/story/ArchFrame'
+import { Botanical } from '../components/story/Botanical'
+import { RotatingBadge } from '../components/story/RotatingBadge'
+import { StoryStatement } from '../components/story/StoryStatement'
+import { VelocityMarquee } from '../components/story/VelocityMarquee'
 import { Reveal, SplitText } from '../components/ui/Reveal'
 import { SectionHeading } from '../components/ui/SectionHeading'
 import { cn } from '../lib/cn'
+import { useScrollProgress } from '../lib/motion'
 
 type Pillar = 'Design' | 'Strategie' | 'Technik'
 
@@ -34,20 +40,20 @@ function CompetenceMap() {
           {(['Design', 'Strategie', 'Technik'] as Pillar[]).map((a, i, arr) => {
             const b = arr[(i + 1) % 3]
             const on = linked.includes(a) && linked.includes(b)
-            return <motion.line key={a + b} x1={nodes[a].x} y1={nodes[a].y} x2={nodes[b].x} y2={nodes[b].y} stroke={on ? '#e4572e' : '#ffffff'} strokeOpacity={on ? 0.9 : 0.15} strokeWidth={on ? 0.8 : 0.4} initial={{ pathLength: 0 }} whileInView={{ pathLength: 1 }} viewport={{ once: true }} transition={{ duration: 1.2, delay: i * 0.2 }} />
+            return <motion.line key={a + b} x1={nodes[a].x} y1={nodes[a].y} x2={nodes[b].x} y2={nodes[b].y} stroke={on ? '#9a7443' : '#ffffff'} strokeOpacity={on ? 0.9 : 0.15} strokeWidth={on ? 0.8 : 0.4} initial={{ pathLength: 0 }} whileInView={{ pathLength: 1 }} viewport={{ once: true }} transition={{ duration: 1.2, delay: i * 0.2 }} />
           })}
           {(['Design', 'Strategie', 'Technik'] as Pillar[]).map((p) => (
-            <motion.line key={p} x1="50" y1="58" x2={nodes[p].x} y2={nodes[p].y} stroke="#a99cf0" strokeDasharray="1 1.5" strokeWidth="0.4" animate={{ strokeOpacity: linked.includes(p) ? 0.9 : 0.15 }} />
+            <motion.line key={p} x1="50" y1="58" x2={nodes[p].x} y2={nodes[p].y} stroke="#8f9e83" strokeDasharray="1 1.5" strokeWidth="0.4" animate={{ strokeOpacity: linked.includes(p) ? 0.9 : 0.15 }} />
           ))}
         </svg>
         {(Object.keys(nodes) as Pillar[]).map((p) => (
           <motion.div key={p} className="absolute -translate-x-1/2 -translate-y-1/2" style={{ left: `${nodes[p].x}%`, top: `${nodes[p].y}%` }} animate={{ scale: linked.includes(p) ? 1.08 : 0.9, opacity: linked.includes(p) ? 1 : 0.4 }}>
-            <span className={cn('grid h-24 w-24 place-items-center rounded-full font-display text-base font-semibold transition-colors sm:h-28 sm:w-28', linked.includes(p) ? 'bg-glut text-white shadow-[0_0_60px_-10px_rgba(228,87,46,0.8)]' : 'bg-ink-3 text-white/70')}>{p}</span>
+            <span className={cn('grid h-24 w-24 place-items-center rounded-full font-display text-base font-semibold transition-colors sm:h-28 sm:w-28', linked.includes(p) ? 'bg-glut text-white shadow-[0_0_60px_-10px_rgba(154,116,67,0.8)]' : 'bg-ink-3 text-white/70')}>{p}</span>
           </motion.div>
         ))}
         <div className="absolute left-1/2 top-[58%] -translate-x-1/2 -translate-y-1/2 text-center">
           <AnimatePresence mode="wait">
-            <motion.p key={active ?? -1} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="max-w-[9rem] font-serif text-xl italic leading-tight text-paper">
+            <motion.p key={active ?? -1} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="script max-w-[9rem] text-4xl leading-tight text-sand">
               {active === null ? 'Adelina' : skills[active].t}
             </motion.p>
           </AnimatePresence>
@@ -93,34 +99,52 @@ const values = [
 
 export default function About() {
   const ref = useRef<HTMLElement>(null)
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
+  const { scrollYProgress } = useScrollProgress({ target: ref, offset: ['start start', 'end start'] })
   const imgY = useTransform(scrollYProgress, [0, 1], ['0%', '12%'])
   const imgScale = useTransform(scrollYProgress, [0, 1], [1, 1.08])
 
   return (
     <>
-      <section ref={ref} className="relative overflow-hidden bg-paper pb-20 pt-32 sm:pt-40">
-        <div className="container-x grid items-end gap-12 lg:grid-cols-[1.1fr_0.9fr]">
-          <div className="pb-6">
+      <section ref={ref} className="relative overflow-hidden bg-paper pb-24 pt-32 sm:pt-40">
+        <div className="pointer-events-none absolute -right-40 top-0 h-[40rem] w-[40rem] rounded-full bg-iris-soft blur-3xl" aria-hidden="true" />
+        <Botanical kind="branch" className="pointer-events-none absolute -left-6 bottom-0 hidden h-[80%] text-moss/35 lg:block" fill />
+        <div className="container-x relative grid items-center gap-16 lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="relative z-10">
             <p className="eyebrow text-muted">Über mich</p>
-            <h1 className="display-xl mt-6">
-              <SplitText text="Hallo, ich bin" /> <SplitText text="Adelina." className="serif-accent text-glut" delay={0.2} />
+            <motion.p initial={{ clipPath: 'inset(0 100% 0 0)' }} animate={{ clipPath: 'inset(0 0% 0 0)' }} transition={{ duration: 1.5, delay: 0.2, ease: [0.65, 0, 0.35, 1] }} className="script mt-8 text-6xl text-glut sm:text-7xl">
+              Hallo, ich bin
+            </motion.p>
+            <h1 className="font-display text-[clamp(4rem,12vw,10rem)] uppercase leading-[0.85] tracking-[-0.02em]">
+              <SplitText text="Adelina" delay={0.4} />
             </h1>
-            <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="lead mt-8 max-w-xl text-muted">
+            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.9 }} className="mt-4 text-[0.72rem] uppercase tracking-[0.42em] text-muted">
+              Webdesign · Grafikdesign · Kommunikation · Marketing
+            </motion.p>
+            <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }} className="lead mt-8 max-w-xl text-muted">
               Ich gestalte Websites und Markenauftritte für Unternehmen, die online so überzeugen wollen wie im persönlichen Gespräch. Dabei bin ich keine anonyme Agentur, sondern deine direkte Ansprechpartnerin – von der ersten Idee bis lange nach dem Launch.
             </motion.p>
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.7 }} className="mt-10 flex flex-wrap gap-3">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.9 }} className="mt-10 flex flex-wrap gap-3">
               <Button to="/kontakt">Lass uns kennenlernen</Button>
               <Button to="/arbeitsweise" variant="ghost">So arbeite ich</Button>
             </motion.div>
           </div>
-          <motion.div initial={{ opacity: 0, clipPath: 'inset(20% 0 0 0 round 2.5rem)' }} animate={{ opacity: 1, clipPath: 'inset(0% 0 0 0 round 2.5rem)' }} transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }} className="relative aspect-[4/5] overflow-hidden rounded-[2.5rem]">
-            <motion.div style={{ y: imgY, scale: imgScale }} className="h-full w-full">
-              <Portrait eager />
+          <div className="relative mx-auto w-full max-w-[440px]">
+            <motion.div style={{ y: imgY }}>
+              <ArchFrame className="aspect-[4/5.3]">
+                <motion.div style={{ scale: imgScale }} className="h-full w-full">
+                  <Portrait eager />
+                </motion.div>
+              </ArchFrame>
             </motion.div>
-          </motion.div>
+            <RotatingBadge text="Design · Strategie · Technik · " className="absolute -bottom-8 -left-12 w-36 text-ink">
+              <span className="script text-4xl text-glut">ar</span>
+            </RotatingBadge>
+            <Botanical kind="flower" className="absolute -right-12 bottom-6 h-56 text-moss/60" delay={0.8} fill />
+          </div>
         </div>
       </section>
+
+      <StoryStatement label="Meine Haltung" text="Ich gestalte nicht für Algorithmen, sondern für *Menschen* – für deine Kundinnen und Kunden. Und für *dich.*" />
 
       <section className="bg-paper py-24 sm:py-32">
         <div className="container-x grid gap-12 lg:grid-cols-[0.9fr_1.1fr]">
@@ -140,26 +164,29 @@ export default function About() {
         </div>
       </section>
 
-      <section className="bg-paper py-24 sm:py-32">
-        <div className="container-x">
-          <SectionHeading eyebrow="Worauf ich Wert lege" title="Vier Dinge," accent="auf die du dich verlassen kannst." />
-          <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {values.map((v, i) => (
-              <Reveal key={v.t} delay={i * 0.08} className="group relative overflow-hidden rounded-4xl border border-ink/10 bg-white p-7">
-                <span className="absolute -right-4 -top-6 font-display text-[7rem] font-bold leading-none text-ink/[0.04] transition-colors duration-500 group-hover:text-glut/15">{i + 1}</span>
-                <h3 className="relative mt-10 text-2xl">{v.t}</h3>
-                <p className="relative mt-3 leading-relaxed text-muted">{v.d}</p>
-              </Reveal>
-            ))}
-          </div>
+      <section className="overflow-hidden bg-paper pt-24" aria-label="Meine Werte">
+        <VelocityMarquee items={['Meine Werte', 'Meine Werte', 'Meine Werte']} baseVelocity={-2.5} className="text-[18vw] uppercase text-ink lg:text-[12rem]" />
+      </section>
+      <section className="relative overflow-hidden bg-ink py-24 text-paper sm:py-32">
+        <Botanical kind="fern" mode="scroll" className="pointer-events-none absolute -left-10 bottom-0 h-[90%] text-iris/25" />
+        <div className="container-x relative">
+        <div className="grid gap-px overflow-hidden rounded-[2rem] bg-white/10 sm:grid-cols-2">
+          {values.map((v, i) => (
+            <Reveal key={v.t} delay={i * 0.08} className="group relative bg-ink p-8 transition-colors duration-700 hover:bg-moss sm:p-12">
+              <span className="font-display text-6xl italic text-sand/80">{['I', 'II', 'III', 'IV'][i]}</span>
+              <h3 className="mt-6 text-3xl uppercase tracking-[0.04em]">{v.t}</h3>
+              <p className="mt-4 max-w-sm leading-relaxed text-white/65">{v.d}</p>
+            </Reveal>
+          ))}
+        </div>
         </div>
       </section>
 
       <section className="bg-paper-2/60 py-24">
         <div className="container-x">
           <Reveal className="mx-auto max-w-4xl text-center">
-            <p className="font-serif text-4xl italic leading-tight sm:text-6xl">„Eine gute Website zeigt nicht, was alles möglich ist – sondern, <span className="text-glut">was dich ausmacht.</span>“</p>
-            <p className="mt-6 text-muted">— Adelina Rrustolli</p>
+            <p className="font-display text-4xl italic leading-tight sm:text-6xl">„Eine gute Website zeigt nicht, was alles möglich ist – sondern, <span className="text-glut">was dich ausmacht.</span>“</p>
+            <p className="script mt-8 text-5xl text-ink/70">Adelina</p>
           </Reveal>
         </div>
       </section>

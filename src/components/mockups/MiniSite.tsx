@@ -5,8 +5,8 @@ export type Device = 'desktop' | 'tablet' | 'mobile'
 export type MockMode = 'sketch' | 'wire' | 'final'
 
 const fontFamily: Record<MockTheme['font'], string> = {
-  serif: 'var(--font-serif)',
-  grotesk: 'var(--font-display)',
+  serif: 'var(--font-display)',
+  grotesk: 'var(--font-sans)',
   rounded: 'ui-rounded, "SF Pro Rounded", var(--font-sans)',
 }
 

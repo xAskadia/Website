@@ -126,12 +126,14 @@ export default function Contact() {
   const aria = (k: keyof FormState) => ({ 'aria-invalid': !!errors[k], 'aria-describedby': errors[k] ? `${id(k)}-err` : undefined })
 
   return (
-    <section className="relative bg-paper pb-24 pt-32 sm:pt-40">
+    <section className="relative overflow-hidden bg-paper pb-24 pt-32 sm:pt-40">
+      <div className="pointer-events-none absolute -left-40 top-20 h-[34rem] w-[34rem] rounded-full bg-iris-soft/80 blur-3xl" aria-hidden="true" />
       <div className="container-x grid gap-14 lg:grid-cols-[0.85fr_1.15fr]">
         {/* Intro */}
         <div className="lg:sticky lg:top-28 lg:self-start">
           <p className="eyebrow text-muted">Kontakt & Projektanfrage</p>
-          <h1 className="display-lg mt-6">Erzähl mir von <span className="serif-accent text-glut">deinem Projekt.</span></h1>
+          <p className="script mt-6 text-6xl text-glut">Schön, dass du da bist</p>
+          <h1 className="display-lg mt-1">Erzähl mir von <span className="serif-accent text-glut">deinem Projekt.</span></h1>
           <p className="lead mt-6 text-muted">Ob fertige Vorstellung oder erste Idee: Schreib mir, was du vorhast. {site.contact.responseTime}</p>
           <div className="mt-10 flex items-center gap-4 rounded-3xl border border-ink/10 bg-white p-4">
             <div className="h-16 w-16 shrink-0 overflow-hidden rounded-2xl"><Portrait label={false} /></div>
@@ -191,7 +193,7 @@ export default function Contact() {
                 <input id={id('email')} type="email" className="field" autoComplete="email" value={f.email} onChange={(e) => set('email', e.target.value)} {...aria('email')} />
               </Field>
               <Field label="Gewünschte Dienstleistung" id={id('service')} error={errors.service}>
-                <select id={id('service')} className="field appearance-none bg-[url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 12 12%22><path d=%22m3 4.5 3 3 3-3%22 stroke=%22%2316131d%22 stroke-width=%221.5%22 fill=%22none%22/></svg>')] bg-[length:14px] bg-[right_1rem_center] bg-no-repeat pr-10" value={f.service} onChange={(e) => set('service', e.target.value)} {...aria('service')}>
+                <select id={id('service')} className="field appearance-none bg-[url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 12 12%22><path d=%22m3 4.5 3 3 3-3%22 stroke=%22%23222a21%22 stroke-width=%221.5%22 fill=%22none%22/></svg>')] bg-[length:14px] bg-[right_1rem_center] bg-no-repeat pr-10" value={f.service} onChange={(e) => set('service', e.target.value)} {...aria('service')}>
                   <option value="">Bitte wählen …</option>
                   {services.map((s) => <option key={s.slug} value={s.title}>{s.title}</option>)}
                   <option value="Noch unklar – Beratung gewünscht">Noch unklar – Beratung gewünscht</option>
@@ -224,7 +226,7 @@ export default function Contact() {
 
               <div>
                 <label className="flex cursor-pointer items-start gap-3">
-                  <input id={id('privacy')} type="checkbox" checked={f.privacy} onChange={(e) => set('privacy', e.target.checked)} className="mt-1 h-5 w-5 shrink-0 accent-[#e4572e]" {...aria('privacy')} />
+                  <input id={id('privacy')} type="checkbox" checked={f.privacy} onChange={(e) => set('privacy', e.target.checked)} className="mt-1 h-5 w-5 shrink-0 accent-[#9a7443]" {...aria('privacy')} />
                   <span className="text-sm leading-relaxed text-muted">
                     Ich habe die <Link to="/datenschutz" className="text-ink underline underline-offset-2">Datenschutzerklärung</Link> gelesen und bin einverstanden, dass meine Angaben zur Bearbeitung meiner Anfrage verwendet werden. <span className="text-glut">*</span>
                   </span>

@@ -47,7 +47,7 @@ export default function Wissen() {
 
   return (
     <>
-      <PageHero eyebrow="Wissen & FAQ" title="Gute Fragen" accent="verdienen klare Antworten." intro="Was kostet eine Website? Wie lange dauert das? Muss ich Texte selbst schreiben? Hier findest du Antworten – verständlich und ohne Fachchinesisch." />
+      <PageHero eyebrow="Wissen & FAQ" kicker="Gut zu wissen" scene="studio" title="Gute Fragen" accent="verdienen klare Antworten." intro="Was kostet eine Website? Wie lange dauert das? Muss ich Texte selbst schreiben? Hier findest du Antworten – verständlich und ohne Fachchinesisch." />
 
       <section className="bg-paper pb-24">
         <div className="container-x grid gap-12 lg:grid-cols-[300px_1fr]">

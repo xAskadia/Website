@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
+import { Botanical } from '../components/story/Botanical'
 import { Button } from '../components/ui/Button'
 import { Icon } from '../components/ui/Icon'
 import { answerSummary, evaluate, questions, solutions, type Answers } from '../lib/finder'
@@ -99,7 +100,8 @@ export default function WebsiteFinder() {
   }
 
   return (
-    <section className="relative min-h-[100svh] overflow-hidden bg-ink pb-24 pt-32 text-paper sm:pt-40">
+    <section className="relative min-h-[100svh] overflow-hidden bg-moss pb-24 pt-32 text-paper sm:pt-40">
+      <Botanical kind="fern" className="pointer-events-none absolute -bottom-10 right-[4%] h-[70%] text-paper/15" />
       <div className="pointer-events-none absolute -right-40 -top-40 h-[40rem] w-[40rem] rounded-full bg-glut/20 blur-3xl" aria-hidden="true" />
       <div className="pointer-events-none absolute -bottom-40 -left-40 h-[30rem] w-[30rem] rounded-full bg-iris/15 blur-3xl" aria-hidden="true" />
       <div className="container-x relative">
@@ -107,7 +109,8 @@ export default function WebsiteFinder() {
           {step === -1 && (
             <motion.div key="intro" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="max-w-4xl">
               <p className="eyebrow text-white/60">Website-Finder</p>
-              <h1 className="display-xl mt-6">Welche Website passt zu <span className="serif-accent text-glut">deinem Unternehmen?</span></h1>
+              <p className="script mt-8 text-6xl text-sand">Finde es heraus</p>
+              <h1 className="display-xl mt-2">Welche Website passt zu <span className="serif-accent text-sand">deinem Unternehmen?</span></h1>
               <p className="lead mt-8 max-w-2xl text-white/70">Sechs kurze Fragen, etwa eine Minute. Am Ende bekommst du eine Empfehlung, die auf deinen Antworten basiert – und kannst sie direkt als Grundlage für eine unverbindliche Anfrage nutzen.</p>
               <div className="mt-10 flex flex-wrap items-center gap-6">
                 <Button onClick={() => setStep(0)} size="lg">Finder starten</Button>
@@ -131,7 +134,7 @@ export default function WebsiteFinder() {
                   {q.options.map((o, i) => {
                     const on = selected.includes(o.id)
                     return (
-                      <motion.button key={o.id} type="button" aria-pressed={on} onClick={() => choose(o.id)} initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }} className={cn('group flex items-center justify-between gap-4 rounded-3xl border p-5 text-left text-lg font-medium transition-all duration-300 sm:p-6', on ? 'border-glut bg-glut text-white' : 'border-white/15 bg-white/[0.03] hover:border-white/40 hover:bg-white/[0.07]')}>
+                      <motion.button key={o.id} type="button" aria-pressed={on} onClick={() => choose(o.id)} initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }} className={cn('group flex items-center justify-between gap-4 rounded-3xl border p-5 text-left text-lg font-medium transition-all duration-300 sm:p-6', on ? 'border-glut bg-glut text-white' : 'border-white/20 bg-white/[0.05] hover:border-white/50 hover:bg-white/[0.1]')}>
                         {o.label}
                         <span className={cn('grid h-7 w-7 shrink-0 place-items-center border-2 transition', q.multi ? 'rounded-lg' : 'rounded-full', on ? 'border-white bg-white text-glut' : 'border-white/25')}>{on && <Icon name="check" className="h-4 w-4" strokeWidth={3} />}</span>
                       </motion.button>

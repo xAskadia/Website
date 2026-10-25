@@ -62,7 +62,7 @@ export default function Portfolio() {
   return (
     <>
       <PageHero
-        eyebrow="Portfolio · Meine Arbeiten"
+        eyebrow="Portfolio · Meine Arbeiten" kicker="Ausgewählte Arbeiten"
         title="Arbeiten, die man"
         accent="anklicken kann."
         intro="Websites, Landingpages und Designkonzepte – mit Desktop-, Tablet- und Mobilansicht. Jedes Projekt erzählt in einer Case Study, wie es entstanden ist."

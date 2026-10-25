@@ -27,7 +27,7 @@ npm run preview    # Build lokal ansehen
 | Seitentitel & Meta-Beschreibungen | `src/content/seo.ts` |
 | Beispielpreise im Konfigurator | `src/content/pricing.ts`; `showExamplePrices: false` blendet alle Preise aus |
 | Logik des Website-Finders | `src/lib/finder.ts` (Punkte pro Antwort, nachvollziehbar kommentiert) |
-| Farben & Schriften (Corporate Design) | `src/styles/index.css` → `@theme` |
+| Farben & Schriften (Corporate Design: Moos, Leinen, Messing, Salbei · Bodoni Moda, Jost, Mrs Saint Delafield) | `src/styles/index.css` → `@theme` |
 
 Alle Platzhalter stehen in `[eckigen Klammern]`. Alle Portfolio-Projekte sind als **fiktive Demo-Projekte** gekennzeichnet (`isDemo: true`).
 

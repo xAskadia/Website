@@ -1,8 +1,9 @@
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion, useTransform } from 'framer-motion'
 import { useRef } from 'react'
 import { DeviceFrame } from '../../components/mockups/DeviceFrame'
 import { MiniSite } from '../../components/mockups/MiniSite'
 import { Configurator } from '../../components/tools/Configurator'
+import { StoryStatement } from '../../components/story/StoryStatement'
 import { Button } from '../../components/ui/Button'
 import { CtaBand } from '../../components/ui/CtaBand'
 import { Icon, type IconName } from '../../components/ui/Icon'
@@ -12,6 +13,7 @@ import { Reveal } from '../../components/ui/Reveal'
 import { SectionHeading } from '../../components/ui/SectionHeading'
 import { projects } from '../../content/projects'
 import { scrollToId } from '../../lib/cn'
+import { useScrollProgress } from '../../lib/motion'
 
 const reasons: { icon: IconName; title: string; text: string }[] = [
   { icon: 'eye', title: 'Der erste Eindruck entsteht online.', text: 'Bevor dich jemand anruft oder besucht, schaut er nach. Deine Website ist oft der allererste Kontakt – und der entscheidet, ob es einen zweiten gibt.' },
@@ -50,14 +52,14 @@ function HeroMock() {
 
 export default function Webdesign() {
   const ref = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
+  const { scrollYProgress } = useScrollProgress({ target: ref, offset: ['start end', 'end start'] })
   const lineH = useTransform(scrollYProgress, [0.1, 0.7], ['0%', '100%'])
 
   return (
     <>
       <PageHero
         crumbs={[{ to: '/leistungen', label: 'Leistungen' }, { to: '/leistungen/webdesign', label: 'Webdesign' }]}
-        eyebrow="Leistung 01 · Mein Schwerpunkt"
+        eyebrow="Leistung 01 · Mein Schwerpunkt" kicker="Websites mit Seele"
         title="Websites, die für dein Unternehmen"
         accent="arbeiten."
         intro="Ich konzipiere, gestalte und entwickle Websites, die zeigen, wer du bist, was du kannst – und die es deinen Kundinnen und Kunden leicht machen, dich zu kontaktieren."
@@ -67,15 +69,17 @@ export default function Webdesign() {
         <Button to="/kontakt" variant="ghost">Direkt anfragen</Button>
       </PageHero>
 
+      <StoryStatement text="Deine Website ist oft der *erste* Eindruck, den Menschen von dir bekommen – und manchmal der *einzige.* Lass ihn uns so gestalten, dass er *bleibt.*" />
+
       {/* Warum */}
       <section className="bg-paper py-24 sm:py-32">
-        <div className="container-x grid gap-14 lg:grid-cols-[0.8fr_1.2fr]">
+        <div className="container-x grid gap-14 lg:grid-cols-[0.75fr_1.25fr]">
           <div className="lg:sticky lg:top-32 lg:self-start">
             <SectionHeading eyebrow="Warum eine professionelle Website" title="Deine Website ist dein" accent="bester Vertriebsmitarbeiter." intro="Sie ist rund um die Uhr erreichbar, erklärt geduldig und hinterlässt Eindruck. Vorausgesetzt, sie ist gut gemacht." />
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             {reasons.map((r, i) => (
-              <Reveal key={r.title} delay={(i % 2) * 0.08} className="group rounded-4xl border border-ink/10 bg-white p-7 transition-all duration-500 hover:-translate-y-1 hover:border-glut/40 hover:shadow-[0_30px_60px_-35px_rgba(228,87,46,0.5)]">
+              <Reveal key={r.title} delay={(i % 2) * 0.08} className="group rounded-4xl border border-ink/10 bg-white p-7 transition-all duration-500 hover:-translate-y-1 hover:border-glut/40 hover:shadow-[0_30px_60px_-35px_rgba(154,116,67,0.5)]">
                 <span className="grid h-12 w-12 place-items-center rounded-2xl bg-paper-2 text-ink transition-colors duration-500 group-hover:bg-glut group-hover:text-white">
                   <Icon name={r.icon} className="h-6 w-6" />
                 </span>

@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { useState } from 'react'
 import { InquiryCalculator } from '../../components/tools/InquiryCalculator'
+import { StoryStatement } from '../../components/story/StoryStatement'
 import { Button } from '../../components/ui/Button'
 import { CtaBand } from '../../components/ui/CtaBand'
 import { Icon, type IconName } from '../../components/ui/Icon'
@@ -63,7 +64,7 @@ export default function OnlineMarketing() {
       <PageHero
         dark
         crumbs={[{ to: '/leistungen', label: 'Leistungen' }, { to: '/leistungen/online-marketing', label: 'Online-Marketing' }]}
-        eyebrow="Leistung 05 · Online-Marketing & digitale Sichtbarkeit"
+        eyebrow="Leistung 05 · Online-Marketing & digitale Sichtbarkeit" kicker="Gesehen werden" scene="forest"
         title="Gefunden. Verstanden."
         accent="Angefragt."
         intro="Die beste Website bringt wenig, wenn Menschen sie nicht finden – oder nicht verstehen, was du anbietest. Ich betrachte Websites deshalb nicht nur gestalterisch, sondern auch strategisch und kommunikativ."
@@ -71,6 +72,8 @@ export default function OnlineMarketing() {
         <Button onClick={() => scrollToId('rechner')}>Zum Anfragen-Rechner</Button>
         <Button to="/kontakt" variant="outline-light">Strategie besprechen</Button>
       </PageHero>
+
+      <StoryStatement text="Sichtbarkeit entsteht, wenn *Gestaltung,* *Inhalt* und *Strategie* in dieselbe Richtung zeigen." />
 
       <section className="bg-paper py-24 sm:py-32">
         <div className="container-x grid gap-12 lg:grid-cols-[1fr_1fr]">

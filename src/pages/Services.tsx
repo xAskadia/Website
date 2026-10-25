@@ -13,7 +13,7 @@ export default function Services() {
   return (
     <>
       <PageHero
-        eyebrow="Leistungen"
+        eyebrow="Leistungen" kicker="Was ich für dich tue" scene="meadow"
         title="Design, Strategie und Technik –"
         accent="aus einer Hand."
         intro="Von der ersten Skizze bis zur fertigen Website, vom Logo bis zur Social-Media-Vorlage: Ich begleite dich dabei, digital so aufzutreten, wie es zu deinem Unternehmen passt."

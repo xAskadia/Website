@@ -1,15 +1,20 @@
 import { motion, useMotionValue, useReducedMotion, useSpring, useTransform, type MotionValue } from 'framer-motion'
-import { useEffect, useRef, type ReactNode } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
+import { Botanical } from '../story/Botanical'
+import { RotatingBadge } from '../story/RotatingBadge'
 import { Button } from '../ui/Button'
 import { Portrait } from '../ui/Portrait'
+import { useScrollProgress } from '../../lib/motion'
 
-/** Maus-Parallax: liefert normierte Werte (-1 … 1), gefedert. */
+const useIsoLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect
+
+/** Maus-Parallax: normierte, gefederte Werte (-1 … 1). */
 function usePointer() {
   const reduce = useReducedMotion()
   const x = useMotionValue(0)
   const y = useMotionValue(0)
-  const sx = useSpring(x, { stiffness: 60, damping: 18 })
-  const sy = useSpring(y, { stiffness: 60, damping: 18 })
+  const sx = useSpring(x, { stiffness: 50, damping: 16 })
+  const sy = useSpring(y, { stiffness: 50, damping: 16 })
   useEffect(() => {
     if (reduce || !window.matchMedia('(pointer: fine)').matches) return
     const onMove = (e: PointerEvent) => {
@@ -22,180 +27,203 @@ function usePointer() {
   return { sx, sy }
 }
 
-function Floating({
-  sx,
-  sy,
-  depth,
-  className,
-  children,
-  rotate = 0,
-  delay = 0,
-}: {
-  sx: MotionValue<number>
-  sy: MotionValue<number>
-  depth: number
-  className: string
-  children: ReactNode
-  rotate?: number
-  delay?: number
-}) {
-  const tx = useTransform(sx, (v) => v * depth * 18)
-  const ty = useTransform(sy, (v) => v * depth * 14)
-  const ry = useTransform(sx, (v) => v * depth * 6 + rotate)
-  const rx = useTransform(sy, (v) => -v * depth * 5)
+function Floating({ sx, sy, depth, className, children, rotate = 0, delay = 0, drift, progress }: { sx: MotionValue<number>; sy: MotionValue<number>; depth: number; className: string; children: ReactNode; rotate?: number; delay?: number; drift: [number, number]; progress: MotionValue<number> }) {
+  const mx = useTransform(sx, (v) => v * depth * 16)
+  const my = useTransform(sy, (v) => v * depth * 12)
+  const dx = useTransform(progress, [0, 0.4], [0, drift[0]])
+  const dy = useTransform(progress, [0, 0.4], [0, drift[1]])
+  const x = useTransform([mx, dx] as MotionValue<number>[], ([a, b]) => (a as number) + (b as number))
+  const y = useTransform([my, dy] as MotionValue<number>[], ([a, b]) => (a as number) + (b as number))
+  const opacity = useTransform(progress, [0.15, 0.38], [1, 0])
+  const rot = useTransform(progress, [0, 0.4], [rotate, rotate * 3])
   return (
-    <motion.div
-      className={`absolute ${className}`}
-      style={{ x: tx, y: ty, rotateY: ry, rotateX: rx, transformStyle: 'preserve-3d' }}
-      initial={{ opacity: 0, scale: 0.85, z: -120 }}
-      animate={{ opacity: 1, scale: 1, z: 0 }}
-      transition={{ duration: 1.2, delay: 0.5 + delay, ease: [0.16, 1, 0.3, 1] }}
-      aria-hidden="true"
-    >
-      <div className="animate-float" style={{ animationDelay: `${delay * -3}s` }}>
-        {children}
-      </div>
+    <motion.div className={`absolute z-20 ${className}`} style={{ x, y, opacity, rotate: rot }} aria-hidden="true">
+      <motion.div initial={{ opacity: 0, scale: 0.8, y: 30 }} animate={{ opacity: 1, scale: 1, y: 0 }} transition={{ duration: 1.2, delay: 1 + delay, ease: [0.16, 1, 0.3, 1] }}>
+        <div className="animate-float" style={{ animationDelay: `${delay * -3}s` }}>
+          {children}
+        </div>
+      </motion.div>
     </motion.div>
   )
 }
 
-/** Dunkle, dreidimensional wirkende Arbeitswelt rund um das Porträt. */
+/**
+ * Startbühne: Porträt im Bogen, umgeben von einer schwebenden Arbeitswelt.
+ * Beim Scrollen öffnet sich der Bogen zu einem Portal und füllt den Bildschirm –
+ * Übergang ins erste Kapitel der Geschichte.
+ */
 export function HeroStage() {
+  const reduce = useReducedMotion()
   const { sx, sy } = usePointer()
-  const ref = useRef<HTMLElement>(null)
-  const portraitX = useTransform(sx, (v) => v * -10)
-  const portraitY = useTransform(sy, (v) => v * -8)
-  const glowX = useTransform(sx, (v) => `${50 + v * 12}%`)
-  const glowY = useTransform(sy, (v) => `${45 + v * 10}%`)
-  const glow = useTransform([glowX, glowY] as MotionValue[], ([gx, gy]) => `radial-gradient(600px circle at ${gx} ${gy}, rgba(228,87,46,0.28), transparent 60%)`)
+  const section = useRef<HTMLElement>(null)
+  const stage = useRef<HTMLDivElement>(null)
+  const cell = useRef<HTMLDivElement>(null)
+  const [geo, setGeo] = useState({ dx: 0, dy: 0, s: 6 })
+
+  useIsoLayoutEffect(() => {
+    const measure = () => {
+      if (!stage.current || !cell.current) return
+      const st = stage.current.getBoundingClientRect()
+      const c = cell.current.getBoundingClientRect()
+      if (!c.width) return
+      const cx = c.left - st.left + c.width / 2
+      const cy = c.top - st.top + c.height / 2
+      const s = Math.max(st.width / c.width, st.height / c.height) * 1.25
+      setGeo({ dx: st.width / 2 - cx, dy: st.height / 2 - cy, s })
+    }
+    measure()
+    window.addEventListener('resize', measure)
+    return () => window.removeEventListener('resize', measure)
+  }, [])
+
+  const { scrollYProgress: raw } = useScrollProgress({ target: section, offset: ['start start', 'end end'] })
+  // Funktions-Transform verhindert die (hier fehlerhafte) native Scroll-Timeline-Beschleunigung
+  const p = useTransform(raw, (v) => v)
+  const textY = useTransform(p, [0, 0.35], [0, -140])
+  const textO = useTransform(p, [0.05, 0.3], [1, 0])
+  const archX = useTransform(p, [0.12, 0.62], [0, geo.dx])
+  const archY = useTransform(p, [0.12, 0.62], [0, geo.dy])
+  const archS = useTransform(p, [0.12, 0.7], [1, geo.s])
+  const archR = useTransform(p, [0.45, 0.66], ['999px', '0px'])
+  const portraitO = useTransform(p, [0.22, 0.48], [1, 0])
+  const outlineO = useTransform(p, [0.05, 0.2], [1, 0])
+  const chapterO = useTransform(p, [0.66, 0.8], [0, 1])
+  const chapterY = useTransform(p, [0.66, 0.85], [40, 0])
+  const badgeO = useTransform(p, [0.05, 0.2], [1, 0])
+  const hintO = useTransform(p, [0, 0.06], [1, 0])
+  const mobileFill = useTransform(p, [0.2, 0.6], ['inset(100% 0% 0% 0%)', 'inset(0% 0% 0% 0%)'])
 
   return (
-    <section ref={ref} className="relative isolate min-h-[100svh] overflow-hidden bg-ink text-paper">
-      <motion.div className="absolute inset-0 -z-10" style={{ background: glow }} aria-hidden="true" />
-      <div className="pointer-events-none absolute inset-0 -z-10 text-white opacity-[0.06] dot-grid" aria-hidden="true" />
-      <div className="pointer-events-none absolute -left-40 top-1/3 -z-10 h-[38rem] w-[38rem] rounded-full bg-iris/10 blur-3xl" aria-hidden="true" />
+    <section ref={section} className={reduce ? 'relative' : 'relative h-[260svh]'} aria-label="Einstieg">
+      <div ref={stage} className={reduce ? 'relative min-h-[100svh] overflow-hidden bg-paper' : 'sticky top-0 h-[100svh] overflow-hidden bg-paper'}>
+        {/* Atmosphäre */}
+        <div className="pointer-events-none absolute -right-48 -top-48 h-[44rem] w-[44rem] rounded-full bg-iris-soft blur-3xl" aria-hidden="true" />
+        <div className="pointer-events-none absolute -bottom-40 -left-40 h-[30rem] w-[30rem] rounded-full bg-sand/70 blur-3xl" aria-hidden="true" />
+        <Botanical kind="branch" className="pointer-events-none absolute -left-4 bottom-0 h-[78%] text-moss/35" delay={0.6} fill />
+        <Botanical kind="grass" className="pointer-events-none absolute bottom-0 right-[38%] hidden w-64 text-moss/25 lg:block" delay={1.2} />
 
-      <div className="container-x grid min-h-[100svh] items-center gap-10 pb-16 pt-32 lg:grid-cols-[1.05fr_0.95fr] lg:pt-24">
-        {/* Text */}
-        <div className="relative z-10">
-          <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="eyebrow text-white/60">
-            Webdesign · Grafikdesign · Online-Marketing
-          </motion.p>
-          <h1 className="mt-7 font-display text-[clamp(2.7rem,7vw,6.6rem)] font-semibold leading-[0.95] tracking-[-0.045em]">
-            {[
-              { t: 'Deine Vision.', c: '' },
-              { t: 'Mein Design.', c: 'serif-accent text-glut' },
-              { t: 'Gemeinsam digital sichtbar.', c: '' },
-            ].map((l, i) => (
-              <span key={l.t} className="block overflow-hidden pb-[0.08em]">
-                <motion.span
-                  className={`block ${l.c}`}
-                  initial={{ y: '105%' }}
-                  animate={{ y: '0%' }}
-                  transition={{ duration: 1.1, delay: 0.25 + i * 0.12, ease: [0.16, 1, 0.3, 1] }}
-                >
-                  {l.t}
-                </motion.span>
-              </span>
-            ))}
-          </h1>
-          <motion.p initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.75, duration: 0.8 }} className="lead mt-8 max-w-xl text-white/70">
-            Ich entwickle digitale Auftritte, die nicht nur gut aussehen, sondern deine Marke stärken, Vertrauen schaffen und Kunden überzeugen.
-          </motion.p>
-          <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.9, duration: 0.8 }} className="mt-10 flex flex-wrap gap-3">
-            <Button to="/kontakt" size="lg">Website-Projekt starten</Button>
-            <Button to="/portfolio" variant="outline-light" size="lg">Meine Arbeiten entdecken</Button>
-          </motion.div>
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2 }} className="mt-14 hidden items-center gap-4 text-sm text-white/45 sm:flex">
-            <span className="relative flex h-10 w-6 justify-center rounded-full border border-white/25" aria-hidden="true">
-              <motion.span animate={{ y: [6, 18, 6] }} transition={{ repeat: Infinity, duration: 2.2 }} className="mt-0 h-2 w-1 rounded-full bg-glut" />
-            </span>
-            Scroll und erlebe, wie aus einer Idee eine Website wird
-          </motion.div>
-        </div>
-
-        {/* Bühne */}
-        <div className="relative mx-auto aspect-[4/5] w-full max-w-[520px]" style={{ perspective: 1400 }}>
-          {/* Porträt */}
-          <motion.div
-            style={{ x: portraitX, y: portraitY }}
-            initial={{ opacity: 0, clipPath: 'inset(100% 0 0 0 round 240px 240px 32px 32px)' }}
-            animate={{ opacity: 1, clipPath: 'inset(0% 0 0 0 round 240px 240px 32px 32px)' }}
-            transition={{ duration: 1.4, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="absolute inset-x-[12%] bottom-[4%] top-[6%] overflow-hidden rounded-t-[240px] rounded-b-[32px] ring-1 ring-white/10"
-          >
-            <Portrait eager />
+        <div className="container-x relative grid h-full items-center gap-8 pb-10 pt-28 lg:grid-cols-[1.08fr_0.92fr] lg:pt-20">
+          {/* Text */}
+          <motion.div style={{ y: textY, opacity: textO }} className="relative z-30">
+            <motion.div initial={{ clipPath: 'inset(100% 0 0 0)' }} animate={{ clipPath: 'inset(0% 0 0 0)' }} transition={{ duration: 1.4, delay: 0.3, ease: [0.76, 0, 0.24, 1] }} className="arch absolute -top-12 right-0 h-32 w-24 overflow-hidden sm:hidden" aria-hidden="true">
+              <Portrait label={false} />
+            </motion.div>
+            <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="eyebrow max-w-[62%] text-muted sm:max-w-none">
+              Webdesign · Grafikdesign · Online-Marketing
+            </motion.p>
+            <motion.p
+              initial={{ clipPath: 'inset(0 100% 0 0)' }}
+              animate={{ clipPath: 'inset(0 0% 0 0)' }}
+              transition={{ duration: 1.6, delay: 0.5, ease: [0.65, 0, 0.35, 1] }}
+              className="script mt-6 text-5xl text-glut sm:text-6xl"
+            >
+              Hallo, ich bin Adelina
+            </motion.p>
+            <h1 className="mt-2 font-display text-[clamp(2.6rem,6.4vw,6.4rem)] leading-[0.98] tracking-[-0.025em]">
+              {[
+                { t: 'Deine Vision.', c: '' },
+                { t: 'Mein Design.', c: 'serif-accent text-glut' },
+                { t: 'Gemeinsam digital sichtbar.', c: '' },
+              ].map((l, i) => (
+                <span key={l.t} className="block overflow-hidden pb-[0.06em]">
+                  <motion.span className={`block ${l.c}`} initial={{ y: '110%', rotate: 3 }} animate={{ y: '0%', rotate: 0 }} transition={{ duration: 1.3, delay: 0.7 + i * 0.13, ease: [0.16, 1, 0.3, 1] }}>
+                    {l.t}
+                  </motion.span>
+                </span>
+              ))}
+            </h1>
+            <motion.p initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.2, duration: 0.8 }} className="lead mt-7 max-w-lg text-muted">
+              Ich entwickle digitale Auftritte, die nicht nur gut aussehen, sondern deine Marke stärken, Vertrauen schaffen und Kunden überzeugen.
+            </motion.p>
+            <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.35, duration: 0.8 }} className="mt-9 flex flex-wrap gap-3">
+              <Button to="/kontakt" size="lg">Website-Projekt starten</Button>
+              <Button to="/portfolio" variant="ghost" size="lg">Meine Arbeiten entdecken</Button>
+            </motion.div>
           </motion.div>
 
-          {/* Browserfenster */}
-          <Floating sx={sx} sy={sy} depth={1.4} rotate={-8} className="-left-[6%] top-[10%] w-[46%] sm:-left-[12%]">
-            <div className="overflow-hidden rounded-xl border border-white/15 bg-paper shadow-2xl">
-              <div className="flex gap-1 border-b border-ink/10 bg-paper-2 px-2 py-1.5">
-                {['#ff5f57', '#febc2e', '#28c840'].map((c) => <span key={c} className="h-1.5 w-1.5 rounded-full" style={{ background: c }} />)}
-              </div>
-              <div className="space-y-1.5 p-2.5">
-                <div className="h-2 w-3/5 rounded bg-ink" />
-                <div className="h-1.5 w-4/5 rounded bg-ink/20" />
-                <div className="h-1.5 w-2/3 rounded bg-ink/20" />
-                <div className="mt-2 h-3.5 w-1/3 rounded-full bg-glut" />
-                <div className="mt-2 grid grid-cols-3 gap-1">
-                  <div className="h-6 rounded bg-sand" />
-                  <div className="h-6 rounded bg-iris-soft" />
-                  <div className="h-6 rounded bg-glut-soft" />
+          {/* Bühne: Bogen-Portal */}
+          <div ref={cell} className="relative mx-auto hidden aspect-[4/5.2] w-full max-w-[400px] sm:block lg:max-w-[440px]">
+            <motion.div style={{ opacity: outlineO }} className="arch pointer-events-none absolute inset-0 translate-x-5 -translate-y-5 border border-glut/60" aria-hidden="true" />
+            <motion.div
+              style={reduce ? undefined : { x: archX, y: archY, scale: archS, borderTopLeftRadius: archR, borderTopRightRadius: archR }}
+              initial={{ clipPath: 'inset(100% 0% 0% 0%)' }}
+              animate={{ clipPath: 'inset(0% 0% 0% 0%)' }}
+              transition={{ duration: 1.6, delay: 0.3, ease: [0.76, 0, 0.24, 1] }}
+              className="arch absolute inset-0 z-10 overflow-hidden bg-moss will-change-transform"
+            >
+              <motion.div style={{ opacity: portraitO }} className="h-full w-full">
+                <Portrait eager />
+              </motion.div>
+            </motion.div>
+
+            <motion.div style={{ opacity: badgeO }} className="absolute -bottom-8 -left-14 z-30 w-36">
+              <RotatingBadge text="Webdesign · Branding · Marketing · " className="w-36 text-ink">
+                <span className="script text-4xl text-glut">ar</span>
+              </RotatingBadge>
+            </motion.div>
+
+            <Floating progress={p} sx={sx} sy={sy} depth={1.4} rotate={-6} drift={[-260, -120]} className="-left-[38%] top-[12%] w-[58%]">
+              <div className="overflow-hidden rounded-xl border border-ink/10 bg-white/90 shadow-[0_30px_60px_-30px_rgba(34,42,33,0.5)] backdrop-blur">
+                <div className="flex gap-1 border-b border-ink/10 bg-paper px-2.5 py-1.5">
+                  {[0, 1, 2].map((i) => <span key={i} className="h-1.5 w-1.5 rounded-full bg-ink/20" />)}
+                </div>
+                <div className="space-y-1.5 p-3">
+                  <div className="font-display text-[0.95rem] leading-tight text-ink">Dein Unternehmen.</div>
+                  <div className="h-1.5 w-4/5 rounded bg-ink/15" />
+                  <div className="h-1.5 w-2/3 rounded bg-ink/15" />
+                  <div className="mt-2 h-4 w-2/5 rounded-full bg-glut" />
                 </div>
               </div>
-            </div>
-          </Floating>
+            </Floating>
 
-          {/* Farbpalette */}
-          <Floating sx={sx} sy={sy} depth={2} rotate={10} delay={0.15} className="-right-[2%] top-[4%] sm:-right-[8%]">
-            <div className="rounded-2xl border border-white/10 bg-ink-2/90 p-3 shadow-2xl backdrop-blur">
-              <p className="mb-2 text-[9px] uppercase tracking-[0.2em] text-white/50">Palette</p>
-              <div className="flex gap-1.5">
-                {['#e4572e', '#a99cf0', '#e7d3b0', '#f5f1ea'].map((c) => <span key={c} className="h-7 w-7 rounded-full ring-1 ring-white/10" style={{ background: c }} />)}
+            <Floating progress={p} sx={sx} sy={sy} depth={2} rotate={8} delay={0.15} drift={[220, -160]} className="-right-[16%] top-[6%]">
+              <div className="rounded-2xl border border-ink/10 bg-white/90 p-3 shadow-[0_30px_60px_-30px_rgba(34,42,33,0.5)] backdrop-blur">
+                <p className="mb-2 text-[9px] uppercase tracking-[0.25em] text-muted">Palette</p>
+                <div className="flex gap-1.5">
+                  {['#4a5743', '#8f9e83', '#e5d6bd', '#9a7443'].map((c) => <span key={c} className="h-7 w-7 rounded-full ring-1 ring-black/5" style={{ background: c }} />)}
+                </div>
               </div>
-            </div>
-          </Floating>
+            </Floating>
 
-          {/* Typo-Karte */}
-          <Floating sx={sx} sy={sy} depth={1.1} rotate={6} delay={0.3} className="-right-[4%] top-[42%] sm:-right-[10%]">
-            <div className="rounded-2xl bg-paper px-4 py-3 text-ink shadow-2xl">
-              <p className="font-serif text-4xl italic leading-none">Aa</p>
-              <p className="mt-1 text-[9px] uppercase tracking-[0.2em] text-muted">Typografie</p>
-            </div>
-          </Floating>
-
-          {/* Smartphone */}
-          <Floating sx={sx} sy={sy} depth={1.8} rotate={-6} delay={0.45} className="bottom-[2%] left-[0%] w-[24%] sm:-left-[4%]">
-            <div className="rounded-[18px] bg-ink-3 p-1 shadow-2xl ring-1 ring-white/15">
-              <div className="aspect-[9/17] overflow-hidden rounded-[14px] bg-glut p-2">
-                <div className="mx-auto mb-2 h-1 w-1/3 rounded-full bg-ink/30" />
-                <div className="h-1.5 w-4/5 rounded bg-white" />
-                <div className="mt-1 h-1.5 w-3/5 rounded bg-white" />
-                <div className="mt-3 h-10 rounded-lg bg-white/25" />
-                <div className="mt-2 h-2.5 w-1/2 rounded-full bg-ink" />
+            <Floating progress={p} sx={sx} sy={sy} depth={1.1} rotate={5} delay={0.3} drift={[260, 40]} className="-right-[18%] top-[46%]">
+              <div className="rounded-2xl bg-ink px-4 py-3 text-paper shadow-2xl">
+                <p className="font-display text-4xl italic leading-none">Aa</p>
+                <p className="mt-1 text-[9px] uppercase tracking-[0.25em] text-white/60">Bodoni · Jost</p>
               </div>
-            </div>
-          </Floating>
+            </Floating>
 
-          {/* Statuschip */}
-          <Floating sx={sx} sy={sy} depth={2.4} delay={0.6} className="bottom-[14%] right-[0%] sm:-right-[6%]">
-            <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-3.5 py-2 text-xs font-medium text-white shadow-xl backdrop-blur-md">
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#28c840] opacity-60" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-[#28c840]" />
-              </span>
-              Website ist live
-            </div>
-          </Floating>
-
-          {/* Cursor */}
-          <Floating sx={sx} sy={sy} depth={3} delay={0.75} className="left-[42%] top-[30%]">
-            <svg viewBox="0 0 24 24" className="h-7 w-7 drop-shadow-lg" aria-hidden="true">
-              <path d="M4 3l7 17 2.5-7L21 10.5z" fill="#f5f1ea" stroke="#16131d" strokeWidth="1.2" strokeLinejoin="round" />
-            </svg>
-          </Floating>
+            <Floating progress={p} sx={sx} sy={sy} depth={2.2} delay={0.5} drift={[160, 140]} className="-right-[10%] bottom-[10%]">
+              <div className="flex items-center gap-2 rounded-full border border-ink/10 bg-white/90 px-4 py-2 text-[0.68rem] font-medium uppercase tracking-[0.18em] text-ink shadow-xl backdrop-blur">
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#5c9a5a] opacity-60" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-[#5c9a5a]" />
+                </span>
+                Website ist live
+              </div>
+            </Floating>
+          </div>
         </div>
+
+        {/* Smartphone: Fläche wächst von unten statt Portal-Zoom */}
+        {!reduce && <motion.div style={{ clipPath: mobileFill }} className="absolute inset-0 z-[35] bg-moss sm:hidden" aria-hidden="true" />}
+
+        {/* Kapitel I – erscheint im geöffneten Portal */}
+        {!reduce && (
+          <motion.div style={{ opacity: chapterO, y: chapterY }} className="pointer-events-none absolute inset-0 z-40 grid place-items-center px-6 text-center text-paper">
+            <div>
+              <p className="eyebrow justify-center text-white/60">Kapitel I</p>
+              <p className="script mt-6 text-6xl text-sand sm:text-7xl">Jede Marke</p>
+              <p className="display-lg mx-auto mt-1 max-w-4xl">hat eine Geschichte. <span className="serif-accent text-sand">Lass sie uns erzählen.</span></p>
+            </div>
+          </motion.div>
+        )}
+
+        <motion.div style={{ opacity: hintO }} className="absolute bottom-6 left-1/2 z-30 hidden -translate-x-1/2 flex-col items-center gap-2 text-[0.62rem] uppercase tracking-[0.3em] text-muted sm:flex" aria-hidden="true">
+          Scrollen
+          <span className="relative h-10 w-px overflow-hidden bg-ink/15">
+            <motion.span className="absolute inset-x-0 top-0 h-1/2 bg-glut" animate={{ y: ['-100%', '200%'] }} transition={{ repeat: Infinity, duration: 1.8, ease: 'easeInOut' }} />
+          </span>
+        </motion.div>
       </div>
     </section>
   )
