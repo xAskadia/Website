@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Nach dem Domain-Kauf "ihre-domain.de" ersetzen -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://www.ihre-domain.de/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.ihre-domain.de/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ihre-domain.de/en/"/>
+  </url>
+  <url>
+    <loc>https://www.ihre-domain.de/en/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.ihre-domain.de/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ihre-domain.de/en/"/>
+  </url>
+  <url>
+    <loc>https://www.ihre-domain.de/leistungen.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.ihre-domain.de/leistungen.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ihre-domain.de/en/services.html"/>
+  </url>
+  <url>
+    <loc>https://www.ihre-domain.de/en/services.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.ihre-domain.de/leistungen.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ihre-domain.de/en/services.html"/>
+  </url>
+  <url>
+    <loc>https://www.ihre-domain.de/referenzen.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.ihre-domain.de/referenzen.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ihre-domain.de/en/work.html"/>
+  </url>
+  <url>
+    <loc>https://www.ihre-domain.de/en/work.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.ihre-domain.de/referenzen.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ihre-domain.de/en/work.html"/>
+  </url>
+  <url>
+    <loc>https://www.ihre-domain.de/ueber-mich.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.ihre-domain.de/ueber-mich.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ihre-domain.de/en/about.html"/>
+  </url>
+  <url>
+    <loc>https://www.ihre-domain.de/en/about.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.ihre-domain.de/ueber-mich.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ihre-domain.de/en/about.html"/>
+  </url>
+  <url>
+    <loc>https://www.ihre-domain.de/kontakt.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.ihre-domain.de/kontakt.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ihre-domain.de/en/contact.html"/>
+  </url>
+  <url>
+    <loc>https://www.ihre-domain.de/en/contact.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.ihre-domain.de/kontakt.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ihre-domain.de/en/contact.html"/>
+  </url>
+  <url>
+    <loc>https://www.ihre-domain.de/impressum.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.ihre-domain.de/impressum.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ihre-domain.de/en/legal-notice.html"/>
+  </url>
+  <url>
+    <loc>https://www.ihre-domain.de/en/legal-notice.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.ihre-domain.de/impressum.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ihre-domain.de/en/legal-notice.html"/>
+  </url>
+  <url>
+    <loc>https://www.ihre-domain.de/datenschutz.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.ihre-domain.de/datenschutz.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ihre-domain.de/en/privacy.html"/>
+  </url>
+  <url>
+    <loc>https://www.ihre-domain.de/en/privacy.html</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.ihre-domain.de/datenschutz.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.ihre-domain.de/en/privacy.html"/>
+  </url>
+</urlset>

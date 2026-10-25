@@ -1,0 +1,1 @@
+Hier die Schriftdateien (.woff2) ablegen – Anleitung siehe README.md, Abschnitt "Schriften".
